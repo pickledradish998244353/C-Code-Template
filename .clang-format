@@ -1,0 +1,53 @@
+---
+# 基础风格
+BasedOnStyle: LLVM
+
+# --- 核心缩进设置 ---
+IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+ColumnLimit: 0
+
+# --- 预处理器缩进 (解决 #ifdef 靠左的问题) ---
+# BeforeHash 会让 '#' 符号跟着代码缩进
+IndentPPDirectives: BeforeHash
+
+# --- 类成员对齐 ---
+# 让 public: / private: 与 class 关键字垂直对齐
+AccessModifierOffset: -4
+
+# --- 短语句合并 ---
+AllowShortLoopsOnASingleLine: true
+AllowShortIfStatementsOnASingleLine: AllIfsAndElse
+AllowShortBlocksOnASingleLine: Always
+AllowShortFunctionsOnASingleLine: None
+
+# --- 大括号换行逻辑 ---
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterClass: false
+  AfterControlStatement: Never
+  AfterEnum: false
+  AfterFunction: false
+  AfterNamespace: false
+  AfterObjCDeclaration: false
+  AfterStruct: false
+  AfterUnion: false
+  AfterExternBlock: false
+  BeforeCatch: true
+  BeforeElse: true
+  BeforeIterationDeclaration: false
+  SplitEmptyFunction: true
+  SplitEmptyRecord: true
+  SplitEmptyNamespace: true
+
+# --- 竞赛风格保护 ---
+# 保持宏定义的原始对齐，不进行自动清理
+AlignConsecutiveMacros: None
+# 连续赋值不强制对齐，防止打乱手动排列的变量
+AlignConsecutiveAssignments: None
+
+# 修正可能冲突的旧版参数
+DerivePointerAlignment: false
+PointerAlignment: Left
+---
