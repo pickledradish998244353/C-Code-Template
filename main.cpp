@@ -3,6 +3,10 @@
 #define x first
 #define y second
 #define all(x) x.begin(), x.end()
+#define vec1(T, name, n, val) vector<T> name(n, val)
+#define vec2(T, name, n, m, val) vector<vector<T>> name(n, vector<T>(m, val))
+#define vec3(T, name, n, m, k, val) vector<vector<vector<T>>> name(n, vector<vector<T>>(m, vector<T>(k, val)))
+#define vec4(T, name, n, m, k, p, val) vector<vector<vector<vector<T>>>> name((n), vector<vector<vector<T>>>((m), vector<vector<T>>((k), vector<T>((p), (val)))))
 
 using namespace std;
 using i128 = __int128;
@@ -65,27 +69,32 @@ bool cmp(LD a, LD b) {
 }
 
 void solve() {
-    int n, l, r;
-    cin >> n >> l >> r;
-    vector<int> a(n + 1);
-    for (int i = 0; i <= n; ++i) cin >> a[i];
+    int n, m;
+    cin >> n >> m;
+    vector<vector<LL>> a(n + 1, vector<LL>(m + 1, 0));
+    vec3(LL, f, n + 1, m + 1, 2, -LL_INF);
 
-    vector<LL> f(n + 1, -LL_INF);
-    f[0] = 0;
-    deque<int> q;
-    LL ans = -LL_INF;
-    for (int i = l; i <= n; ++i) {
-        while (q.size() && q.front() < i - r) q.pop_front();
-        while (q.size() && f[i - l] >= f[q.back()]) q.pop_back();
-        q.push_back(i - l);
-        if (q.size()) {
-            f[i] = f[q.front()] + a[i];
+    for (int i = 1; i <= n; ++i) {
+        for (int j = 1; j <= m; ++j) {
+            cin >> a[i][j];
         }
-
-        if (i + r > n) ans = max(ans, f[i]);
     }
 
-    cout << ans << '\n';
+    f[1][1][0] = f[1][1][1] = a[1][1];
+    function<LL(int, int, int)> dfs = [&](int x, int y, int flg) {
+        if (x < 1 || x > n || y < 1 || y > m) return -LL_INF;
+        if (f[x][y][flg] != -LL_INF) return f[x][y][flg];
+        if (flg) {
+            f[x][y][flg] = max({dfs(x + 1, y, flg), dfs(x, y - 1, flg), dfs(x, y - 1, flg ^ 1)}) + a[x][y];
+        }
+        else {
+            f[x][y][flg] = max({dfs(x - 1, y, flg), dfs(x, y - 1, flg), dfs(x, y - 1, flg ^ 1)}) + a[x][y];
+        }
+
+        return f[x][y][flg];
+    };
+
+    cout << dfs(n, m, 0) << '\n';
 
 /**/ #ifdef LOCAL
     cout << flush;
