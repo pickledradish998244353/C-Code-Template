@@ -93,9 +93,7 @@ struct T {
         pushup(u);
     }
 
-    T(int _n) {
-        n = _n;
-        tr.resize(4 * n + 10);
+    T(int _n) : n(_n), tr(4 * _n + 10) {
         build(1, 1, n);
     }
 };

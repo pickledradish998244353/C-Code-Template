@@ -43,6 +43,11 @@ ostream& operator<<(ostream& os, i128 val) {
     return os;
 }
 
+bool cmp(LD a, LD b) {
+    if (fabs(a - b) < EPS) return 1;
+    return 0;
+}
+
 struct Hash {
     vector<int> h, p;
     int B = 131;
@@ -63,27 +68,58 @@ struct Hash {
     }
 };
 
-bool cmp(LD a, LD b) {
-    if (fabs(a - b) < EPS) return 1;
-    return 0;
+void solve() {
+    int n;
+    cin >> n;
+    vec1(int, a, n, 0);
+    for (int i = 0; i < n; ++i) cin >> a[i];
+
+    if (n == 1) {
+        cout << "Alice" << '\n';
+        return;
+    }
+
+    if (a[0] > 1) {
+        cout << "Alice" << '\n';
+        return;
+    }
+
+    int idx = -1;
+    for (int i = 0; i < n; ++i) {
+        if (a[i] > 1) {
+            idx = i;
+            break;
+        }
+    }
+
+    if (idx == -1) {
+        if (n & 1) {
+            cout << "Alice" << '\n';
+        }
+        else {
+            cout << "Bob" << '\n';
+        }
+        return;
+    }
+
+    if (idx & 1) {
+        cout << "Bob" << '\n';
+    }
+    else cout << "Alice" << '\n';
+
+/**/ #ifdef LOCAL
+    cout << flush;
+/**/ #endif
 }
 
-class Solution {
-public:
-    int findKthLargest(vector<int>& a, int k) {
-        int n = a.size();
-        int l = 0, r = n - 1;
-        int mid = a[l + r >> 1];
-        vector<int> x, y, z;
-        
-        for (int v : a) {
-            if (v > mid) x.push_back(v);
-            else if (v == mid) y.push_back(v);
-            else z.push_back(v);
-        }
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(0), cout.tie(0);
 
-        if (k <= x.size()) return findKthLargest(x, k);
-        else if (k <= x.size() + y.size()) return mid;
-        else return findKthLargest(z, k - x.size() - y.size());
-    }
-};
+    int T;
+    cin >> T;
+    while (T--) solve();
+    cout << fixed << setprecision(15);
+
+    return 0;
+}

@@ -72,10 +72,7 @@ struct Fenwick {
     int n;
     vector<LL> tr;
 
-    void init(int _n) {
-        n = _n;
-        tr.assign(_n, 0);
-    }
+    Fenwick(int _n) : n(_n), tr(_n, 0) {}
 
     int lowbit(int x) {
         return x & -x;

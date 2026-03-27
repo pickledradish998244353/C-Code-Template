@@ -68,9 +68,72 @@ struct Hash {
     }
 };
 
+struct Fenwick {
+    int n;
+    vector<LL> tr;
+
+    Fenwick(int _n) : n(_n), tr(_n, 0) {}
+
+    int lowbit(int x) {
+        return x & -x;
+    }
+
+    void add(int u, LL x) {
+        for (int i = u; i <= n; i += lowbit(i)) tr[i] += x;
+    }
+
+    LL query(int u) {
+        LL ans = 0;
+        for (int i = u; i; i -= lowbit(i)) ans += tr[i];
+        return ans;
+    }
+
+    LL query(int a, int b) {
+        if (a > b) return 0;
+        return query(b) - query(a - 1);
+    }
+
+    LL kth(LL k) {
+        int x = 0;
+        for (int p = 1 << 19; p; p >>= 1) {
+            if (x + p <= n && tr[x + p] < k) {
+                k -= tr[x + p];
+                x += p;
+            }
+        }
+        return x + 1;
+    }
+};
+
 void solve() {
+    int n;
+    cin >> n;
+    vector<LL> a(n + 1, 0);
+    for (int i = 1; i <= n; ++i) {
+        int v;
+        cin >> v;
+        a[v]++;
+    }
+
+    Fenwick t1(n + 1), t2(n + 1);
+
+    LL ans = 0;
+    for (int i = 1; i <= n; ++i) {
+        if (a[i] == 0) continue;
+
+        LL cur = a[i] + t1.query(a[i] - 1);
+        LL cnt = t2.query(a[i], n);
+        cur += cnt * (a[i] - 1);
+        ans = max(ans, cur);
+        t1.add(a[i], a[i]);
+        t2.add(a[i], 1);
+    }
+
+    cout << n - ans << '\n';
+
 /**/ #ifdef LOCAL
-    cout << flush;
+            cout
+        << flush;
 /**/ #endif
 }
 
