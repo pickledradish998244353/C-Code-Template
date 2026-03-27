@@ -18,7 +18,7 @@ using PII = pair<int, int>;
 using PLL = pair<LL, LL>;
 using PLD = pair<LD, LD>;
 
-const int N = 2e5 + 10, MOD = 998244353;
+const int N = 1e5 + 10, MOD = 998244353;
 const int INF = 1e9;
 const LL LL_INF = 1e18;
 const LD EPS = 1e-8;
@@ -43,6 +43,11 @@ ostream& operator<<(ostream& os, i128 val) {
     return os;
 }
 
+bool cmp(LD a, LD b) {
+    if (fabs(a - b) < EPS) return 1;
+    return 0;
+}
+
 struct Hash {
     vector<int> h, p;
     int B = 131;
@@ -63,12 +68,44 @@ struct Hash {
     }
 };
 
-bool cmp(LD a, LD b) {
-    if (fabs(a - b) < EPS) return 1;
-    return 0;
-}
-
 void solve() {
+    int n;
+    cin >> n;
+    vec1(int, a, n, 0);
+    for (int i = 0; i < n; ++i) cin >> a[i];
+    
+    if (n == 1) {
+        cout << "Alice" << '\n';
+        return;
+    }
+
+    if (a[0] > 1) {
+        cout << "Alice" << '\n';
+        return;
+    }
+
+    int idx = -1;
+    for (int i = 0; i < n; ++i) {
+        if (a[i] > 1) {
+            idx = i;
+            break;
+        }
+    }
+
+    if (idx == -1) {
+        if (n & 1) {
+            cout << "Alice" << '\n';
+        }
+        else {
+            cout << "Bob" << '\n';
+        }
+        return;
+    }
+
+    if (idx & 1) {
+        cout << "Bob" << '\n';
+    }
+    else cout << "Alice" << '\n';
 
 /**/ #ifdef LOCAL
     cout << flush;
@@ -79,7 +116,8 @@ int main() {
     ios::sync_with_stdio(false);
     cin.tie(0), cout.tie(0);
 
-    int T = 1;
+    int T;
+    cin >> T;
     while (T--) solve();
     cout << fixed << setprecision(15);
 

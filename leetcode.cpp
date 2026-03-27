@@ -43,11 +43,6 @@ ostream& operator<<(ostream& os, i128 val) {
     return os;
 }
 
-bool cmp(LD a, LD b) {
-    if (fabs(a - b) < EPS) return 1;
-    return 0;
-}
-
 struct Hash {
     vector<int> h, p;
     int B = 131;
@@ -68,20 +63,27 @@ struct Hash {
     }
 };
 
-void solve() {
-/**/ #ifdef LOCAL
-    cout << flush;
-/**/ #endif
-}
-
-int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(0), cout.tie(0);
-
-    int T;
-    cin >> T;
-    while (T--) solve();
-    cout << fixed << setprecision(15);
-
+bool cmp(LD a, LD b) {
+    if (fabs(a - b) < EPS) return 1;
     return 0;
 }
+
+class Solution {
+public:
+    int findKthLargest(vector<int>& a, int k) {
+        int n = a.size();
+        int l = 0, r = n - 1;
+        int mid = a[l + r >> 1];
+        vector<int> x, y, z;
+        
+        for (int v : a) {
+            if (v > mid) x.push_back(v);
+            else if (v == mid) y.push_back(v);
+            else z.push_back(v);
+        }
+
+        if (k <= x.size()) return findKthLargest(x, k);
+        else if (k <= x.size() + y.size()) return mid;
+        else return findKthLargest(z, k - x.size() - y.size());
+    }
+};
