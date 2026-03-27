@@ -69,44 +69,6 @@ struct Hash {
 };
 
 void solve() {
-    int n;
-    cin >> n;
-    vec1(int, a, n, 0);
-    for (int i = 0; i < n; ++i) cin >> a[i];
-    
-    if (n == 1) {
-        cout << "Alice" << '\n';
-        return;
-    }
-
-    if (a[0] > 1) {
-        cout << "Alice" << '\n';
-        return;
-    }
-
-    int idx = -1;
-    for (int i = 0; i < n; ++i) {
-        if (a[i] > 1) {
-            idx = i;
-            break;
-        }
-    }
-
-    if (idx == -1) {
-        if (n & 1) {
-            cout << "Alice" << '\n';
-        }
-        else {
-            cout << "Bob" << '\n';
-        }
-        return;
-    }
-
-    if (idx & 1) {
-        cout << "Bob" << '\n';
-    }
-    else cout << "Alice" << '\n';
-
 /**/ #ifdef LOCAL
     cout << flush;
 /**/ #endif
@@ -116,8 +78,7 @@ int main() {
     ios::sync_with_stdio(false);
     cin.tie(0), cout.tie(0);
 
-    int T;
-    cin >> T;
+    int T = 1;
     while (T--) solve();
     cout << fixed << setprecision(15);
 
