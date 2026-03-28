@@ -68,72 +68,51 @@ struct Hash {
     }
 };
 
-struct Fenwick {
-    int n;
-    vector<LL> tr;
-
-    Fenwick(int _n) : n(_n), tr(_n, 0) {}
-
-    int lowbit(int x) {
-        return x & -x;
-    }
-
-    void add(int u, LL x) {
-        for (int i = u; i <= n; i += lowbit(i)) tr[i] += x;
-    }
-
-    LL query(int u) {
-        LL ans = 0;
-        for (int i = u; i; i -= lowbit(i)) ans += tr[i];
-        return ans;
-    }
-
-    LL query(int a, int b) {
-        if (a > b) return 0;
-        return query(b) - query(a - 1);
-    }
-
-    LL kth(LL k) {
-        int x = 0;
-        for (int p = 1 << 19; p; p >>= 1) {
-            if (x + p <= n && tr[x + p] < k) {
-                k -= tr[x + p];
-                x += p;
-            }
-        }
-        return x + 1;
-    }
-};
-
 void solve() {
     int n;
     cin >> n;
-    vector<LL> a(n + 1, 0);
-    for (int i = 1; i <= n; ++i) {
-        int v;
-        cin >> v;
-        a[v]++;
+    int a, b;
+    cin >> a >> b;
+    vector<vector<int>> g(n + 1);
+    for (int i = 1; i < n; ++i) {
+        int x, y;
+        cin >> x >> y;
+        g[x].push_back(y);
+        g[y].push_back(x);
     }
 
-    Fenwick t1(n + 1), t2(n + 1);
+    vector<int> d1(n + 1, -1), d2(n + 1, -1);
+    auto bfs = [&](int st, vector<int>& d) -> void {
+        d[st] = 0;
+        queue<int> q;
+        q.push(st);
+        while (q.size()) {
+            int u = q.front();
+            q.pop();
+            for (int v : g[u]) {
+                if (d[v] == -1) {
+                    d[v] = d[u] + 1;
+                    q.push(v);
+                }
+            }
+        }
+    };
 
-    LL ans = 0;
+    bfs(a, d1), bfs(b, d2);
+
+    bool ok = 0;
     for (int i = 1; i <= n; ++i) {
-        if (a[i] == 0) continue;
-
-        LL cur = a[i] + t1.query(a[i] - 1);
-        LL cnt = t2.query(a[i], n);
-        cur += cnt * (a[i] - 1);
-        ans = max(ans, cur);
-        t1.add(a[i], a[i]);
-        t2.add(a[i], 1);
+        if (g[i].size() == 1) {
+            // 因为小红先手可以等于
+            if (2 * d1[i] <= d2[i]) ok |= 1;
+        }
     }
 
-    cout << n - ans << '\n';
+    if (ok) cout << "red" << '\n';
+    else cout << "purple" << '\n';
 
 /**/ #ifdef LOCAL
-            cout
-        << flush;
+    cout << flush;
 /**/ #endif
 }
 
