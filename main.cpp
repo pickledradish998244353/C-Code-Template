@@ -71,48 +71,79 @@ struct Hash {
 void solve() {
     int n;
     cin >> n;
-    int a, b;
-    cin >> a >> b;
-    vector<vector<int>> g(n + 1);
-    for (int i = 1; i < n; ++i) {
-        int x, y;
-        cin >> x >> y;
-        g[x].push_back(y);
-        g[y].push_back(x);
+    struct F {
+        int a, b, c;
+        bool operator<(const F& f) const {
+            return c < f.c;
+        };
+    };
+
+    vector<int> p(n + 1, 0);
+    for (int i = 1; i <= n; ++i) p[i] = i;
+
+    function<int(int)> find = [&](int u) -> int {
+        if (u != p[u]) {
+            p[u] = find(p[u]);
+        }
+        return p[u];
+    };
+
+    vector<F> ed;
+    ed.reserve(n * n / 2);
+    vec2(int, dis, n + 1, n + 1, 0);
+
+    for (int i = 1; i <= n; ++i) {
+        for (int j = i + 1; j <= n; ++j) {
+            cin >> dis[i][j];
+            dis[j][i] = dis[i][j];
+            ed.push_back({i, j, dis[i][j]});
+        }
     }
 
-    vector<int> d1(n + 1, -1), d2(n + 1, -1);
-    auto bfs = [&](int st, vector<int>& d) -> void {
-        d[st] = 0;
+    sort(all(ed));
+    vector<vector<PLL>> g(n + 1);
+    for (auto [a, b, c] : ed) {
+        int fa1 = find(a), fa2 = find(b);
+        if (fa1 == fa2) continue;
+        g[a].push_back({b, c});
+        g[b].push_back({a, c});
+        p[fa2] = fa1;
+    }
+
+    vec2(LL, d, n + 1, n + 1, -1);
+
+    auto bfs = [&](int x) {
+        d[x][x] = 0;
         queue<int> q;
-        q.push(st);
+        q.push(x);
         while (q.size()) {
             int u = q.front();
             q.pop();
-            for (int v : g[u]) {
-                if (d[v] == -1) {
-                    d[v] = d[u] + 1;
+            for (auto& [v, w] : g[u]) {
+                if (d[x][v] == -1) {
+                    d[x][v] = d[x][u] + w;
                     q.push(v);
                 }
             }
         }
     };
 
-    bfs(a, d1), bfs(b, d2);
+    for (int i = 1; i <= n; ++i) bfs(i);
 
-    bool ok = 0;
     for (int i = 1; i <= n; ++i) {
-        if (g[i].size() == 1) {
-            // 因为小红先手可以等于
-            if (2 * d1[i] <= d2[i]) ok |= 1;
+        for (int j = i + 1; j <= n; ++j) {
+            if (dis[i][j] != d[i][j]) {
+                cout << "No" << '\n';
+                return;
+            }
         }
     }
 
-    if (ok) cout << "red" << '\n';
-    else cout << "purple" << '\n';
+    cout << "Yes" << '\n';
 
 /**/ #ifdef LOCAL
-    cout << flush;
+    cout
+        << flush;
 /**/ #endif
 }
 
@@ -120,8 +151,7 @@ int main() {
     ios::sync_with_stdio(false);
     cin.tie(0), cout.tie(0);
 
-    int T;
-    cin >> T;
+    int T = 1;
     while (T--) solve();
     cout << fixed << setprecision(15);
 
