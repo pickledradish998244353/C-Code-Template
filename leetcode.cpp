@@ -68,58 +68,23 @@ struct Hash {
     }
 };
 
-void solve() {
-    int n;
-    cin >> n;
-    vec1(int, a, n, 0);
-    for (int i = 0; i < n; ++i) cin >> a[i];
-
-    if (n == 1) {
-        cout << "Alice" << '\n';
-        return;
-    }
-
-    if (a[0] > 1) {
-        cout << "Alice" << '\n';
-        return;
-    }
-
-    int idx = -1;
-    for (int i = 0; i < n; ++i) {
-        if (a[i] > 1) {
-            idx = i;
-            break;
+class Solution {
+public:
+    int findDuplicate(vector<int>& a) {
+        int i = 0, j = 0;
+        while (1) {
+            i = a[i];
+            j = a[a[j]];
+            if (i == j) break;
         }
-    }
 
-    if (idx == -1) {
-        if (n & 1) {
-            cout << "Alice" << '\n';
+        i = 0;
+        while (1) {
+            i = a[i];
+            j = a[j];
+            if (i == j) break;
         }
-        else {
-            cout << "Bob" << '\n';
-        }
-        return;
+
+        return i;
     }
-
-    if (idx & 1) {
-        cout << "Bob" << '\n';
-    }
-    else cout << "Alice" << '\n';
-
-/**/ #ifdef LOCAL
-    cout << flush;
-/**/ #endif
-}
-
-int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(0), cout.tie(0);
-
-    int T;
-    cin >> T;
-    while (T--) solve();
-    cout << fixed << setprecision(15);
-
-    return 0;
-}
+};
