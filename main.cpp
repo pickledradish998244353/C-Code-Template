@@ -48,6 +48,17 @@ bool cmp(LD a, LD b) {
     return 0;
 }
 
+LL qpow(LL a, LL b) {
+    LL ans = 1;
+    a %= MOD;
+    while (b) {
+        if (b & 1) ans = ans * a % MOD;
+        a = a * a % MOD;
+        b >>= 1;
+    }
+    return ans;
+}
+
 struct Hash {
     vector<int> h, p;
     int B = 131;
@@ -71,79 +82,9 @@ struct Hash {
 void solve() {
     int n;
     cin >> n;
-    struct F {
-        int a, b, c;
-        bool operator<(const F& f) const {
-            return c < f.c;
-        };
-    };
-
-    vector<int> p(n + 1, 0);
-    for (int i = 1; i <= n; ++i) p[i] = i;
-
-    function<int(int)> find = [&](int u) -> int {
-        if (u != p[u]) {
-            p[u] = find(p[u]);
-        }
-        return p[u];
-    };
-
-    vector<F> ed;
-    ed.reserve(n * n / 2);
-    vec2(int, dis, n + 1, n + 1, 0);
-
-    for (int i = 1; i <= n; ++i) {
-        for (int j = i + 1; j <= n; ++j) {
-            cin >> dis[i][j];
-            dis[j][i] = dis[i][j];
-            ed.push_back({i, j, dis[i][j]});
-        }
-    }
-
-    sort(all(ed));
-    vector<vector<PLL>> g(n + 1);
-    for (auto [a, b, c] : ed) {
-        int fa1 = find(a), fa2 = find(b);
-        if (fa1 == fa2) continue;
-        g[a].push_back({b, c});
-        g[b].push_back({a, c});
-        p[fa2] = fa1;
-    }
-
-    vec2(LL, d, n + 1, n + 1, -1);
-
-    auto bfs = [&](int x) {
-        d[x][x] = 0;
-        queue<int> q;
-        q.push(x);
-        while (q.size()) {
-            int u = q.front();
-            q.pop();
-            for (auto& [v, w] : g[u]) {
-                if (d[x][v] == -1) {
-                    d[x][v] = d[x][u] + w;
-                    q.push(v);
-                }
-            }
-        }
-    };
-
-    for (int i = 1; i <= n; ++i) bfs(i);
-
-    for (int i = 1; i <= n; ++i) {
-        for (int j = i + 1; j <= n; ++j) {
-            if (dis[i][j] != d[i][j]) {
-                cout << "No" << '\n';
-                return;
-            }
-        }
-    }
-
-    cout << "Yes" << '\n';
-
+    cout << n << '\n';
 /**/ #ifdef LOCAL
-    cout
-        << flush;
+    cout << flush;
 /**/ #endif
 }
 

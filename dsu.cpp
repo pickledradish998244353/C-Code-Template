@@ -48,25 +48,16 @@ bool cmp(LD a, LD b) {
     return 0;
 }
 
-struct Hash {
-    vector<int> h, p;
-    int B = 131;
-    Hash(const string& s) {
-        int n = s.size();
-        h.resize(n + 1, 0);
-        p.resize(n + 1, 1);
-        for (int i = 0; i < n; ++i) {
-            p[i + 1] = p[i] * B % MOD;
-            h[i + 1] = (h[i] * B + s[i]) % MOD;
-        }
+LL qpow(LL a, LL b) {
+    LL ans = 1;
+    a %= MOD;
+    while (b) {
+        if (b & 1) ans = ans * a % MOD;
+        a = a * a % MOD;
+        b >>= 1;
     }
-
-    LL get(int l, int r) {
-        LL v = h[r] - h[l - 1] * p[r - l + 1] % MOD;
-        v = (v % MOD + MOD) % MOD;
-        return v;
-    }
-};
+    return ans;
+}
 
 struct DSU {
     int n;

@@ -18,7 +18,7 @@ using PII = pair<int, int>;
 using PLL = pair<LL, LL>;
 using PLD = pair<LD, LD>;
 
-const int N = 2e5 + 10, MOD = 998244353;
+const int N = 1e5 + 10, MOD = 998244353;
 const int INF = 1e9;
 const LL LL_INF = 1e18;
 const LD EPS = 1e-8;
@@ -48,44 +48,23 @@ bool cmp(LD a, LD b) {
     return 0;
 }
 
-LL qpow(LL a, LL b) {
-    LL ans = 1;
-    a %= MOD;
-    while (b) {
-        if (b & 1) ans = ans * a % MOD;
-        a = a * a % MOD;
-        b >>= 1;
-    }
-    return ans;
-}
-
-struct T {
-    struct Node {
-        int l, r;
-    };
-
-    int n;
-    vector<Node> tr;
-
-    void pushup(int u) {
-        Node &ls = tr[u << 1], &rs = tr[u << 1 | 1];
+struct Hash {
+    vector<int> h, p;
+    int B = 131;
+    Hash(const string& s) {
+        int n = s.size();
+        h.resize(n + 1, 0);
+        p.resize(n + 1, 1);
+        for (int i = 0; i < n; ++i) {
+            p[i + 1] = p[i] * B % MOD;
+            h[i + 1] = (h[i] * B + s[i]) % MOD;
+        }
     }
 
-    void pushdown(int u) {
-        Node &ls = tr[u << 1], &rs = tr[u << 1 | 1];
-    }
-
-    void build(int u, int l, int r) {
-        tr[u] = {l, r};
-        if (l == r) return;
-        int mid = l + r >> 1;
-        build(u << 1, l, mid);
-        build(u << 1 | 1, mid + 1, r);
-        pushup(u);
-    }
-
-    T(int _n) : n(_n), tr(4 * _n + 10) {
-        build(1, 1, n);
+    LL get(int l, int r) {
+        LL v = h[r] - h[l - 1] * p[r - l + 1] % MOD;
+        v = (v % MOD + MOD) % MOD;
+        return v;
     }
 };
 
