@@ -80,6 +80,30 @@ struct DSU {
     }
 };
 
+struct EDSU {
+    int n;
+    vector<int> p;
+    vector<int> sz;
+    EDSU(int _n) : n(_n), p(_n), sz(_n) {
+        for (int i = 0; i < _n; ++i) {
+            p[i] = i;
+        }
+        for (int i = 0; i < _n; ++i) sz[i] = 1;
+    };
+
+    int find(int x) {
+        if (p[x] != x) return p[x] = find(p[x]);
+        return p[x];
+    }
+
+    void merge(int x, int y) {
+        int fa1 = find(x), fa2 = find(y);
+        if (fa1 == fa2) return;
+        p[fa2] = fa1;
+        sz[fa1] += sz[fa2];
+    }
+};
+
 void solve() {
 /**/ #ifdef LOCAL
     cout << flush;
