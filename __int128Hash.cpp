@@ -43,26 +43,6 @@ ostream& operator<<(ostream& os, i128 val) {
     return os;
 }
 
-struct Hash {
-    vector<int> h, p;
-    int B = 131;
-    Hash(const string& s) {
-        int n = s.size();
-        h.resize(n + 1, 0);
-        p.resize(n + 1, 1);
-        for (int i = 0; i < n; ++i) {
-            p[i + 1] = p[i] * B % MOD;
-            h[i + 1] = (h[i] * B + s[i]) % MOD;
-        }
-    }
-
-    LL get(int l, int r) {
-        LL v = h[r] - h[l - 1] * p[r - l + 1] % MOD;
-        v = (v % MOD + MOD) % MOD;
-        return v;
-    }
-};
-
 struct i128hash {
     static uint64_t splitmix64(uint64_t x) {
         static const uint64_t FIXED_RANDOM = chrono::steady_clock::now().time_since_epoch().count();
