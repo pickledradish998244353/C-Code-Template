@@ -1,64 +1,91 @@
 #include <bits/stdc++.h>
+
+#define x first
+#define y second
+#define all(x) x.begin(), x.end()
+#define vec1(T, name, n, val) vector<T> name(n, val)
+#define vec2(T, name, n, m, val) vector<vector<T>> name(n, vector<T>(m, val))
+#define vec3(T, name, n, m, k, val) vector<vector<vector<T>>> name(n, vector<vector<T>>(m, vector<T>(k, val)))
+#define vec4(T, name, n, m, k, p, val) vector<vector<vector<vector<T>>>> name((n), vector<vector<vector<T>>>((m), vector<vector<T>>((k), vector<T>((p), (val)))))
+
 using namespace std;
-using ll = long long;
+using i128 = __int128;
+using u128 = unsigned __int128;
+using LL = long long;
+using LD = long double;
+using ULL = unsigned long long;
+using PII = pair<int, int>;
+using PLL = pair<LL, LL>;
+using PLD = pair<LD, LD>;
 
-vector<ll> num(2e5);
-ll n, m, k;
+const int N = 1e5 + 10, MOD = 998244353;
+const int INF = 1e9;
+const LL LL_INF = 1e18;
+const LD EPS = 1e-8;
+const int dx4[] = {-1, 0, 1, 0}, dy4[] = {0, 1, 0, -1};
+const int dx8[] = {-1, -1, -1, 0, 0, 1, 1, 1}, dy8[] = {-1, 0, 1, -1, 1, -1, 0, 1};
 
-ll num_cost(ll new_m) {
-    ll now_ans = 1e9;
-    for (ll i = 0; i < new_m; i++) // 看第 i 列
-    {
-        ll one = 0; // 这一列要换颜色的小朋友数量
-        for (ll j = i; j < n; j += new_m) {
-            if (num[j] != k) one++; // 如果颜色不是 k，就得换
-        }
-        now_ans = min(now_ans, one); // 记录这一列需要换的最少人数
-    }
-    return now_ans;
+istream& operator>>(istream& is, i128& val) {
+    string str;
+    is >> str;
+    val = 0;
+    bool flag = false;
+    if (str[0] == '-') flag = true, str = str.substr(1);
+    for (char& c : str) val = val * 10 + c - '0';
+    if (flag) val = -val;
+    return is;
 }
 
-void solve() {
-    ll ans = 1e9;
-    cin >> n >> m >> k;
-    for (ll i = 0; i < n; i++) cin >> num[i];
+ostream& operator<<(ostream& os, i128 val) {
+    if (val < 0) os << "-", val = -val;
+    if (val > 9) os << val / 10;
+    os << static_cast<char>(val % 10 + '0');
+    return os;
+}
 
-    // 尝试增加每排人数（从 m 往上加）
-    for (ll i = m; i <= n && i - m < ans; i++) {
-        ans = min(ans, num_cost(i) + i - m);
+bool cmp(LD a, LD b) {
+    if (fabs(a - b) < EPS) return 1;
+    return 0;
+}
+
+LL qpow(LL a, LL b) {
+    LL ans = 1;
+    a %= MOD;
+    while (b) {
+        if (b & 1) ans = ans * a % MOD;
+        a = a * a % MOD;
+        b >>= 1;
     }
-    // 尝试减少每排人数（从 m 往下减）
-    for (ll i = m - 1; i > 0 && m - i < ans; i--) {
-        ans = min(ans, num_cost(i) + m - i);
+    return ans;
+}
+
+mt19937_64 rnd(time(0));
+
+void solve() {
+    auto is = [&](int v) {
+        LD t = sqrtl(v);
+        return 1 * t * t == v;
+    };
+
+    auto check = [&](int v) {
+        if (!is(v)) return 0;
+        int s = 0;
+        while (v) s += v % 10, v /= 10;
+        return (int) is(s);
+    };
+
+    for (int i = 0; i <= 100; ++i) {
+        if (check(i * i)) cout << i * i << '\n';
     }
-    cout << ans << '\n';
 }
 
 int main() {
-    cin.tie(0)->sync_with_stdio(0);
-    int T;
-    cin >> T;
+    ios::sync_with_stdio(false);
+    cin.tie(0), cout.tie(0);
+
+    int T = 1;
     while (T--) solve();
+    cout << fixed << setprecision(15);
+
+    return 0;
 }
-/*
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⣤⡀⣀⣠⣤⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣀⡀⢀⣴⣾⣷⣶⣾⣿⣿⣿⣿⣿⣿⣿⣿⣷⣾⣿⣷⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣾⣿⣿⣿⣿⣿⣿⣿⠿⠛⠛⠉⠉⠉⠉⠉⠉⠛⠻⠿⣿⣿⣿⣿⣿⣶⣤⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⢠⣾⣿⣿⣿⡿⠿⠛⠉⠉⠉⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠙⠿⣿⣿⣿⣷⣄⡀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⣀⣿⣿⣿⠟⠁⠀⠀⠀⠀⠀⠀⠀⣰⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⠿⣿⣿⣿⡄⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⣠⣾⣿⣿⠟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣶⣄⠀⠀⠀⠀⠀⢀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⣻⣿⣿⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⢹⣿⡿⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢰⣿⠁⠈⢢⡀⠀⠀⠀⢸⡇⢀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠻⣿⡟⠒⢦⡀⠀⠀⠀
-⠀⠀⣠⣤⣤⣼⡟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠸⡇⠀⠀⠀⠉⢢⣄⠀⠀⢿⠊⠳⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⣷⡄⠀⢷⠀⠀⠀
-⠀⢰⠇⠀⣰⡟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡇⠀⠀⠀⠀⡌⣹⠗⠦⣬⣇⠀⠉⢢⡀⠀⠀⠀⠀⠀⠀⠀⠀⠘⣿⡀⢸⡄⠀⠀
-⠀⡟⠀⣼⣯⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢰⣆⢹⡀⠀⠀⠀⠉⠁⠀⠀⢀⣀⡁⠀⠀⠉⠳⢴⡆⠀⠀⠀⠀⠀⠀⢹⣧⠈⡇⠀⠀
-⠀⡇⠀⠀⢻⣦⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣾⠻⠉⠛⠂⠀⠀⠀⠀⠀⠀⠻⠿⣿⣿⣿⣶⣦⡀⠛⣇⠀⠀⠀⠀⠀⣈⣿⠀⡇⠀⠀
-⢸⡇⠀⠀⢠⣿⣷⣦⣀⡸⣷⣦⣶⡂⠉⠉⠉⢁⣤⣶⡶⠀⠀⠀⣀⣀⡴⠀⠀⠀⠀⠀⠀⠈⠉⠉⠁⠀⡟⢀⣴⣟⣰⣾⣿⣏⣠⠇⠀⠀
-⠈⡇⠀⠀⢸⣿⠁⠉⣿⠛⠛⠃⡇⠀⠀⢠⣶⣿⡿⠛⠁⠀⠀⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⢿⠟⠿⢿⡏⠀⠘⣿⡀⠀⠀⠀
-⠀⢷⣀⣀⣿⠇⠀⠀⢿⡇⠀⢀⢱⡀⠀⠛⠛⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣼⠀⠀⢸⠇⠀⠀⢹⣿⣄⠀⠀
-⠀⠀⣉⣿⡏⠀⠀⠀⠀⠀⠀⢸⣇⣳⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡰⣿⠃⠀⠀⠀⠀⠀⠀⣿⠈⢧⠀
-⠀⠘⣿⣿⠁⠀⠀⠀⠀⠀⠀⠘⣿⡛⣶⠀⠀⣠⠔⠒⠛⠒⠦⡀⠀⠀⠀⠀⣠⡤⠶⠤⢤⣀⠀⠀⠀⢀⣏⡄⠀⠀⠀⠀⠀⡀⣿⡆⠈⣧
-⣠⡾⠛⣿⣿⣧⠀⠀⠀⠀⢸⣿⠾⢿⡿⠀⣰⠃⠀⠀⠀⠀⠀⢹⡄⠀⠀⡼⠁⠀⠀⠀⠀⠈⠙⣦⠀⢸⣿⡇⣾⣣⡀⠀⢰⣿⣿⣿⣤⠾
-⡟⠀⠀⠻⣿⡟⢷⡄⣤⡀⠈⣿⡀⣸⠇⠀⠏⠀⠀⠀⠀⠀⠀⠀⡇⠀⠀⡇⢀⡀⠀⠀⠀⠀⢀⡟⠀⠀⠋⣿⣿⣿⡇⣠⣿⠿⠛⢷⡀⠀
-⠀⠀⠀⠀⣿⣇⣨⣿⣿⣿⣦⣽⣷⡟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠁⠀⠀⠃⠀⠙⠢⠤⠤⠴⢾⠀⠀⠀⠀⢸⣷⣿⣿⠟⠁⠀⠀⠈⣧⠀
-⠀⠀⠀⠀⠈⠉⠉⠁⠈⠉⠈⢉⣿⡁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠀⠀⠀⠀⢸⡇⠀⠀⠀⠀⠀⠀⠀⣿⠀
-*/
