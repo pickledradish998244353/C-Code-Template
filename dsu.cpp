@@ -87,8 +87,8 @@ struct EDSU {
     EDSU(int _n) : n(_n), p(_n), sz(_n) {
         for (int i = 0; i < _n; ++i) {
             p[i] = i;
+            sz[i] = 1;
         }
-        for (int i = 0; i < _n; ++i) sz[i] = 1;
     };
 
     int find(int x) {
