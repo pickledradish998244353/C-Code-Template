@@ -95,8 +95,10 @@ int main() {
 
     init();
 
-    int T = 1;
+    int T;
+    cin >> T;
     while (T--) solve();
+    cout << fixed << setprecision(15);
 
     return 0;
 }

@@ -63,7 +63,7 @@ struct Random {
     mt19937_64 rng;
     Random() : rng(chrono::steady_clock::now().time_since_epoch().count()) {}
 
-    LL get(LL l, LL r) {
+    LL get64(LL l, LL r) {
         if (l > r) return l;
         return uniform_int_distribution<LL>(l, r)(rng);
     }
