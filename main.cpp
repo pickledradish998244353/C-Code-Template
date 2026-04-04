@@ -20,23 +20,23 @@ using PLD = pair<LD, LD>;
 
 const int N = 1e5 + 10, MOD = 998244353;
 const int INF = 1e9;
-const LL LL_INF = 1e18;
+const LL LL_INF = 2e18;
 const LD EPS = 1e-8;
 const int dx4[] = {-1, 0, 1, 0}, dy4[] = {0, 1, 0, -1};
 const int dx8[] = {-1, -1, -1, 0, 0, 1, 1, 1}, dy8[] = {-1, 0, 1, -1, 1, -1, 0, 1};
 
-istream &operator>>(istream &is, i128 &val) {
+istream& operator>>(istream& is, i128& val) {
     string str;
     is >> str;
     val = 0;
     bool flag = false;
     if (str[0] == '-') flag = true, str = str.substr(1);
-    for (char &c: str) val = val * 10 + c - '0';
+    for (char& c : str) val = val * 10 + c - '0';
     if (flag) val = -val;
     return is;
 }
 
-ostream &operator<<(ostream &os, i128 val) {
+ostream& operator<<(ostream& os, i128 val) {
     if (val < 0) os << "-", val = -val;
     if (val > 9) os << val / 10;
     os << static_cast<char>(val % 10 + '0');
@@ -60,6 +60,34 @@ LL qpow(LL a, LL b) {
 }
 
 void solve() {
+    int n;
+    cin >> n;
+    vec1(int, f, n + 1, (1ll << 31ll) - 1);
+
+    for (int i = 1; i <= n; ++i) {
+        int x;
+        cin >> x;
+        f[x] = x;
+    }
+
+    // SOS DP 高维前缀和
+    for (int i = n; i >= 0; --i) {
+        for (int b = 0; b <= 20; ++b) {
+            int j = i | (1 << b);
+            if (j > n) break;
+            f[i] &= f[j];
+        }
+    }
+
+    for (int mex = 1; mex <= n; ++mex) {
+        if (f[mex] > mex) {
+            cout << mex << '\n';
+            return;
+        }
+    }
+
+    cout << n + 1 << '\n';
+
 /**/ #ifdef LOCAL
     cout << flush;
 /**/ #endif
