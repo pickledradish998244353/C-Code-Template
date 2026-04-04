@@ -62,6 +62,7 @@ LL qpow(LL a, LL b) {
 void solve() {
     int n;
     cin >> n;
+    // f[i]表示i的超集and的结果
     vec1(int, f, n + 1, (1ll << 31ll) - 1);
 
     for (int i = 1; i <= n; ++i) {
