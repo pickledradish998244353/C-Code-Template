@@ -52,14 +52,14 @@ struct Fenwick {
     int n;
     vector<LL> tr;
 
-    Fenwick(int _n) : n(_n), tr(_n, 0) {}
+    Fenwick(int _n) : n(_n + 1), tr(_n + 1, 0) {}
 
     int lowbit(int x) {
         return x & -x;
     }
 
     void add(int u, LL x) {
-        for (int i = u; i <= n; i += lowbit(i)) tr[i] += x;
+        for (int i = u; i < n; i += lowbit(i)) tr[i] += x;
     }
 
     LL query(int u) {
