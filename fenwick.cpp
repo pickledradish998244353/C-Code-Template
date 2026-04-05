@@ -59,10 +59,12 @@ struct Fenwick {
     }
 
     void add(int u, LL x) {
+        if (u <= 0) return;
         for (int i = u; i < n; i += lowbit(i)) tr[i] += x;
     }
 
     LL query(int u) {
+        u = min(u, n - 1);
         LL ans = 0;
         for (int i = u; i; i -= lowbit(i)) ans += tr[i];
         return ans;
@@ -75,7 +77,7 @@ struct Fenwick {
 
     LL kth(LL k) {
         int x = 0;
-        for (int p = 1 << 19; p; p >>= 1) {
+        for (int p = 1 << 20; p; p >>= 1) {
             if (x + p <= n && tr[x + p] < k) {
                 k -= tr[x + p];
                 x += p;
