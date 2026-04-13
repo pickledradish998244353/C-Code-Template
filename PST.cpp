@@ -65,9 +65,7 @@ struct PST {
     struct Node {
         int ls, rs;
         LL sm;
-        Node() {
-            ls = rs = sm = 0;
-        }
+        Node() : ls(0), rs(0), sm(0) {};
     };
     vector<Node> tr;
 
