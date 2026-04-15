@@ -48,8 +48,6 @@ bool cmp(LD a, LD b) {
     return 0;
 }
 
-LL fact[N], infact[N];
-
 LL qpow(LL a, LL b) {
     LL ans = 1;
     a %= MOD;
@@ -61,23 +59,28 @@ LL qpow(LL a, LL b) {
     return ans;
 }
 
-void init() {
-    fact[0] = 1, infact[0] = 1;
-    for (LL i = 1; i < N; ++i) {
-        fact[i] = fact[i - 1] * i % MOD;
-        infact[i] = qpow(fact[i], MOD - 2) % MOD;
+struct Comb {
+    int n;
+
+    vector<LL> fact, infact;
+    Comb(int _n) : n(_n + 1), fact(_n + 1), infact(_n + 1) {
+        fact[0] = 1, infact[0] = 1;
+        for (LL i = 1; i < _n; ++i) {
+            fact[i] = fact[i - 1] * i % MOD;
+            infact[i] = qpow(fact[i], MOD - 2) % MOD;
+        }
+    };
+
+    LL C(LL a, LL b) {
+        if (a < b || b < 0) return 0;
+        return fact[a] % MOD * infact[b] % MOD * infact[a - b] % MOD;
     }
-}
 
-LL C(LL a, LL b) {
-    if (a < b || b < 0) return 0;
-    return fact[a] % MOD * infact[b] % MOD * infact[a - b] % MOD;
-}
-
-LL lucas(LL a, LL b) {
-    if (a < MOD && b < MOD) return C(a, b);
-    return lucas(a / MOD, b / MOD) * lucas(a % MOD, b % MOD) % MOD;
-}
+    LL lucas(LL a, LL b) {
+        if (a < MOD && b < MOD) return C(a, b);
+        return lucas(a / MOD, b / MOD) * lucas(a % MOD, b % MOD) % MOD;
+    }
+};
 
 LL gcd(LL x, LL y) {
     return y ? gcd(y, x % y) : x;
@@ -92,8 +95,6 @@ void solve() {
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(0), cout.tie(0);
-
-    init();
 
     int T;
     cin >> T;
