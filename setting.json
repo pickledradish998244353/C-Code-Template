@@ -1,0 +1,66 @@
+{
+    "[cpp]": {
+        "editor.wordBasedSuggestions": "off",
+        "editor.semanticHighlighting.enabled": true,
+        "editor.stickyScroll.defaultModel": "foldingProviderModel",
+        "editor.suggest.insertMode": "replace",
+        "editor.formatOnPaste": true,
+        "editor.tabSize": 4,
+        "editor.formatOnType": true
+    },
+    "editor.fontSize": 15,
+    "editor.fontFamily": "Fira Code",
+    "editor.fontLigatures": true,
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true,
+    "editor.detectIndentation": true,
+    "editor.formatOnSave": false,
+    "editor.formatOnType": false,
+    "editor.autoIndent": "full",
+    "editor.autoClosingDelete": "always",
+    "editor.autoClosingBrackets": "beforeWhitespace",
+    "C_Cpp.clang_format_fallbackStyle": "{ BasedOnStyle: LLVM, UseTab: Never, IndentWidth: 4, TabWidth: 4, IndentPPDirectives: BeforeHash, BreakBeforeBraces: Attach, AllowShortFunctionsOnASingleLine: true, ColumnLimit: 0, AccessModifierOffset: -4, SpaceBeforeParens: ControlStatements }",
+
+    "workbench.colorCustomizations": {
+        "[Dark 2026]": {
+            "editor.background": "#333333",
+            "sideBar.background": "#2a2a2a",
+            "activityBar.background": "#2a2a2a",
+            "editorStickyScroll.background": "#333333",
+            "breadcrumb.background": "#333333",
+            "editorGroupHeader.tabsBackground": "#2a2a2a",
+            "terminal.background": "#252525",
+            "editorGutter.background": "#333333",
+            "editor.lineHighlightBackground": "#3d3d3d",
+            "editorLineNumber.activeForeground": "#4fc1ff",
+            "sideBar.border": "#444444",
+            "editorGroup.border": "#444444",
+            "tab.inactiveBackground": "#2a2a2a",
+            "tab.activeBackground": "#333333",
+            "tab.activeForeground": "#ffffff"
+        }
+    },
+    "editor.semanticTokenColorCustomizations": {
+        "enabled": true,
+        "rules": {
+            "macro": "#4EC9B0",
+            "macro.constant": "#4EC9B0",
+            "variable.readonly": "#4EC9B0",
+            "entity.name.constant": "#4EC9B0"
+        }
+    },
+
+    "window.systemColorTheme": "dark",
+    "window.titleBarStyle": "custom",
+    "terminal.integrated.enableMultiLinePasteWarning": "never",
+    "debug.onTaskErrors": "showErrors",
+    "editor.guides.indentation": false,
+    "terminal.integrated.fontSize": 14,
+    "C_Cpp.vcFormat.indent.preprocessor": "none",
+    "C_Cpp.formatting": "clangFormat",
+    "C_Cpp.clang_format_style": "file",
+    "git.autofetch": true,
+    "explorer.confirmDelete": false,
+    "cph.general.defaultLanguage": "cpp",
+    "cph.language.cpp.Args": "-O2 -Wall -std=c++20"
+}
