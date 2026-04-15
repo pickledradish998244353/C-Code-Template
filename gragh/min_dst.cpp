@@ -59,7 +59,7 @@ LL qpow(LL a, LL b) {
     return ans;
 }
 
-auto dijkstra(int n, int st, vector<vector<PII>> &g) {
+auto dijkstra = [&](int n, int st, vector<vector<PII>>& g) {
     vector<bool> vis(n + 1);
     vector<LL> d(n + 1, LL_INF);
     d[st] = 0;
@@ -76,11 +76,11 @@ auto dijkstra(int n, int st, vector<vector<PII>> &g) {
                 d[y] = d[v] + w;
                 q.push({d[v], v});
             }
-         }
+        }
     }
 
     return d;
-}
+};
 
 void solve() {
     int n;
