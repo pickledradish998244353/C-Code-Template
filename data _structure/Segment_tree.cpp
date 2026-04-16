@@ -62,6 +62,10 @@ LL qpow(LL a, LL b) {
 struct T {
     struct Node {
         int l, r;
+
+        Node() {
+            l = 0, r = 0;
+        }
     };
 
     int n;
@@ -76,7 +80,7 @@ struct T {
     }
 
     void build(int u, int l, int r) {
-        tr[u] = {l, r};
+        tr[u].l = l, tr[u].r = r;
         if (l == r) return;
         int mid = l + r >> 1;
         build(u << 1, l, mid);
