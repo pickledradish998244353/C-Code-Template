@@ -72,7 +72,6 @@ void solve() {
     }
 
     auto dfs = [&](auto dfs, int u, int fa) -> void {
-        f[u][0] = f[u][1] = 1;
         for (int v : g[u]) {
             if (v == fa) continue;
             dfs(dfs, v, u);
