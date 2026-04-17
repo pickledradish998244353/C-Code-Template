@@ -65,7 +65,7 @@ struct Disc {
 
     Disc() : flg(0) {
     }
-
+    
     void add(int v) {
         if (flg == 1) return;
         a.emplace_back(v);
@@ -79,7 +79,9 @@ struct Disc {
     }
 
     int get(int v) {
-        if (!flg) return -1;
+        if (!flg) {
+            init();
+        }
         return lower_bound(all(a), v) - a.begin() + 1;
     }
 };
