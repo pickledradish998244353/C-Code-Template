@@ -24,6 +24,7 @@ const LL LL_INF = 2e18;
 const LD EPS = 1e-8;
 const int dx4[] = {-1, 0, 1, 0}, dy4[] = {0, 1, 0, -1};
 const int dx8[] = {-1, -1, -1, 0, 0, 1, 1, 1}, dy8[] = {-1, 0, 1, -1, 1, -1, 0, 1};
+const int hx[] = {-2, -2, -1, -1, 1, 1, 2, 2}, hy[] = {-1, 1, -2, 2, -2, 2, -1, 1};
 
 istream& operator>>(istream& is, i128& val) {
     string str;
