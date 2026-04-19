@@ -61,12 +61,12 @@ LL qpow(LL a, LL b) {
 
 struct Disc {
     bool flg;
-    vector<int> a;
+    vector<LL> a;
 
     Disc() : flg(0) {
     }
 
-    void add(int v) {
+    void add(LL v) {
         if (flg == 1) return;
         a.emplace_back(v);
     }
@@ -78,7 +78,7 @@ struct Disc {
         a.erase(unique(all(a)), a.end());
     }
 
-    int get(int v) {
+    int get(LL v) {
         if (!flg) {
             init();
         }
@@ -86,6 +86,9 @@ struct Disc {
     }
 
     int sz() {
+        if (!flg) {
+            init();
+        }
         return a.size();
     }
 };
