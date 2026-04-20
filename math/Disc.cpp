@@ -78,11 +78,11 @@ struct Disc {
         a.erase(unique(all(a)), a.end());
     }
 
-    int get(LL v, bool flg) {
+    int get(LL v, bool t) {
         if (!flg) {
             init();
         }
-        if (flg) return upper_bound(all(a), v) - a.begin() + 1;
+        if (t) return upper_bound(all(a), v) - a.begin() + 1;
         return lower_bound(all(a), v) - a.begin() + 1;
     }
 
