@@ -200,7 +200,10 @@ struct T {
 
     int get_rank(LL val) {
         find(val);
-        return tr[tr[root].s[0]].sz;
+        int rnk;
+        if (tr[root].v < val) rnk = tr[tr[root].s[0]].sz + tr[root].cnt;
+        else rnk = tr[tr[root].s[0]].sz;
+        return rnk;
     }
 
     LL get_k_ptr(int k) {
