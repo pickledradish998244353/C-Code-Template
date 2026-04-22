@@ -77,9 +77,6 @@ struct T {
     vector<Node> tr;
     vector<int> q;
 
-    T(int _n) : root(0), idx(0), tr(_n + 10) {
-    }
-
     int get_node(LL v, int p) {
         int u;
         if (!q.empty()) {
@@ -187,6 +184,7 @@ struct T {
     }
 
     LL get_k(int k) {
+        k++;
         int u = root;
         while (u) {
             int lsz = tr[tr[u].s[0]].sz;
@@ -198,6 +196,49 @@ struct T {
             }
         }
         return -1;
+    }
+
+    int get_rank(LL val) {
+        find(val);
+        return tr[tr[root].s[0]].sz;
+    }
+
+    LL get_k_ptr(int k) {
+        k++;
+        int u = root;
+        while (u) {
+            int lsz = tr[tr[u].s[0]].sz;
+            if (k <= lsz) u = tr[u].s[0];
+            else if (k <= lsz + tr[u].cnt) return u;
+            else {
+                k -= (lsz + tr[u].cnt);
+                u = tr[u].s[1];
+            }
+        }
+        return -1;
+    }
+
+    LL get_pre(LL val) {
+        find(val);
+        int u = root;
+        if (tr[u].v < val) return tr[u].v;
+        u = tr[u].s[0];
+        while (tr[u].s[1]) u = tr[u].s[1];
+        return tr[u].v;
+    }
+
+    LL get_nxt(LL val) {
+        find(val);
+        int u = root;
+        if (tr[u].v > val) return tr[u].v;
+        u = tr[u].s[1];
+        while (tr[u].s[0]) u = tr[u].s[0];
+        return tr[u].v;
+    }
+
+    T(int _n) : root(0), idx(0), tr(_n + 10) {
+        insert(-4e18);
+        insert(4e18);
     }
 };
 
