@@ -61,7 +61,6 @@ LL qpow(LL a, LL b) {
 
 struct Comb {
     int n;
-
     vector<LL> fact, infact;
     Comb(int _n) : n(_n + 1), fact(_n + 1), infact(_n + 1) {
         fact[0] = 1, infact[0] = 1;

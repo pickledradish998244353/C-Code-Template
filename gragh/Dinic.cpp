@@ -24,6 +24,7 @@ const LL LL_INF = 2e18;
 const LD EPS = 1e-8;
 const int dx4[] = {-1, 0, 1, 0}, dy4[] = {0, 1, 0, -1};
 const int dx8[] = {-1, -1, -1, 0, 0, 1, 1, 1}, dy8[] = {-1, 0, 1, -1, 1, -1, 0, 1};
+const int hx[] = {-2, -2, -1, -1, 1, 1, 2, 2}, hy[] = {-1, 1, -2, 2, -2, 2, -1, 1};
 
 istream& operator>>(istream& is, i128& val) {
     string str;
@@ -59,35 +60,76 @@ LL qpow(LL a, LL b) {
     return ans;
 }
 
-vector<LL> dijkstra(int n, int st, const vector<vector<PII>>& g) {
-    vector<LL> d(n, LL_INF);
-    d[st] = 0;
-    priority_queue<PLL, vector<PLL>, greater<PLL>> q;
-    q.push({0, st});
+struct Dinic {
+    struct Edge {
+        int to;
+        LL cap;
+        int rev;
+    };
 
-    while (!q.empty()) {
-        auto [dis, u] = q.top();
-        q.pop();
+    int n;
+    vector<vector<Edge>> adj;
+    vector<int> level;
+    vector<int> cur;
 
-        if (dis > d[u]) continue;
+    Dinic(int _n) : n(_n), adj(_n + 1), level(_n + 1), cur(_n + 1) {
+    }
 
-        for (auto& e : g[u]) {
-            int v = e.x;
-            int w = e.y;
-            if (d[u] + w < d[v]) {
-                d[v] = d[u] + w;
-                q.push({d[v], v});
+    void add(int u, int v, LL w) {
+        adj[u].push_back({v, w, (int)adj[v].size()});
+        adj[v].push_back({u, 0, (int)adj[u].size() - 1});
+    }
+
+    bool bfs(int s, int t) {
+        fill(level.begin(), level.end(), -1);
+        level[s] = 0;
+        queue<int> q;
+        q.push(s);
+        while (!q.empty()) {
+            int u = q.front();
+            q.pop();
+            for (auto& e : adj[u]) {
+                if (e.cap > 0 && level[e.to] == -1) {
+                    level[e.to] = level[u] + 1;
+                    q.push(e.to);
+                }
             }
         }
+        return level[t] != -1;
     }
-    return d;
-}
+
+    LL dfs(int u, int t, LL flow) {
+        if (u == t || flow == 0) return flow;
+        for (int& i = cur[u]; i < adj[u].size(); ++i) {
+            Edge& e = adj[u][i];
+            if (level[e.to] == level[u] + 1 && e.cap > 0) {
+                LL d = dfs(e.to, t, min(flow, e.cap));
+                if (d > 0) {
+                    e.cap -= d;
+                    adj[e.to][e.rev].cap += d;
+                    return d;
+                }
+            }
+        }
+        return 0;
+    }
+
+    LL max_flow(int s, int t) {
+        LL flow = 0;
+        while (bfs(s, t)) {
+            fill(cur.begin(), cur.end(), 0);
+            while (LL pushed = dfs(s, t, LL_INF)) {
+                flow += pushed;
+            }
+        }
+        return flow;
+    }
+};
 
 void solve() {
-    int n;
-    vector<vector<PII>> g(n + 1);
 /**/ #ifdef LOCAL
-    cout << flush;
+    cout
+        << flush;
 /**/ #endif
 }
 
