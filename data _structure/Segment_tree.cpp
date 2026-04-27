@@ -62,9 +62,14 @@ LL qpow(LL a, LL b) {
 struct T {
     struct Node {
         int l, r;
-
+        LL sm;
+        LL tag;
+        LL sq;
         Node() {
             l = 0, r = 0;
+            sm = 0;
+            tag = 0;
+            sq = 0;
         }
     };
 
@@ -73,10 +78,24 @@ struct T {
 
     void pushup(int u) {
         Node &ls = tr[u << 1], &rs = tr[u << 1 | 1];
+        tr[u].sm = (ls.sm + rs.sm) % MOD;
+        tr[u].sq = (ls.sq + rs.sq) % MOD;
+    }
+
+    void pushdown(int u, LL v) {
+        v %= MOD;
+        LL len = tr[u].r - tr[u].l + 1;
+        tr[u].sq = (tr[u].sq + 2ll * tr[u].sm % MOD * v % MOD + v * v % MOD * len % MOD) % MOD;
+        tr[u].sm = (tr[u].sm + len * v % MOD) % MOD;
+        tr[u].tag = (tr[u].tag + v) % MOD;
     }
 
     void pushdown(int u) {
         Node &ls = tr[u << 1], &rs = tr[u << 1 | 1];
+        if (!tr[u].tag) return;
+        pushdown(u << 1, tr[u].tag);
+        pushdown(u << 1 | 1, tr[u].tag);
+        tr[u].tag = 0;
     }
 
     void build(int u, int l, int r) {
@@ -88,11 +107,41 @@ struct T {
         pushup(u);
     }
 
+    void add(int u, int ql, int qr, LL v) {
+        if (tr[u].l >= ql && tr[u].r <= qr) {
+            pushdown(u, v);
+            return;
+        }
+
+        pushdown(u);
+        int mid = tr[u].l + tr[u].r >> 1;
+        if (ql <= mid) add(u << 1, ql, qr, v);
+        if (qr > mid) add(u << 1 | 1, ql, qr, v);
+        pushup(u);
+    }
+
+    LL query(int u, int ql, int qr) {
+        if (tr[u].l >= ql && tr[u].r <= qr) {
+
+        }
+
+        pushdown(u);
+        int mid = tr[u].l + tr[u].r >> 1;
+        if (ql <= mid) {
+
+        }
+        if (qr > mid) {
+
+        }
+        pushup(u);
+
+        return 0;
+    }
+
     T(int _n) : n(_n), tr(4 * _n + 10) {
         build(1, 1, n);
     }
 };
-
 void solve() {
 /**/ #ifdef LOCAL
     cout << flush;
