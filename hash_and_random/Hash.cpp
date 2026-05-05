@@ -49,7 +49,7 @@ bool cmp(LD a, LD b) {
 }
 
 struct Hash {
-    vector<int> h, p;
+    vector<LL> h, p;
     int B = 131;
     Hash(const string& s) {
         int n = s.size();
@@ -60,7 +60,7 @@ struct Hash {
             h[i + 1] = (h[i] * B + s[i]) % MOD;
         }
     }
-
+    // 给定字符串是0-base, get 是1-base
     LL get(int l, int r) {
         LL v = h[r] - h[l - 1] * p[r - l + 1] % MOD;
         v = (v % MOD + MOD) % MOD;
