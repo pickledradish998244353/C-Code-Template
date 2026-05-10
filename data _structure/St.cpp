@@ -66,19 +66,22 @@ struct ST {
     vector<LL> lg;
     vector<vector<LL>> st;
 
-    ST(int _n, int _flg, vector<LL>& a) : n(_n), lg(_n + 1), flg(_flg), st(_n + 1, vector<LL>(N)) {
+    ST(int _n, int _flg, const vector<LL>& a) : n(_n), lg(_n + 1), flg(_flg), st(N, vector<LL>(_n + 1)) {
         for (int i = 2; i <= n; ++i) lg[i] = lg[i / 2] + 1;
-        for (int i = 0; i < n; ++i) {
-            flg ? fill(all(st[i]), -LL_INF) : fill(all(st[i]), LL_INF);
-        }
-        for (int i = 0; i < n; ++i) st[i][0] = a[i];
-        for (int k = 1; k < N; ++k) {
-            for (int i = 0; i + (1 << k) - 1 < n; ++i) {
-                if (flg) {
-                    st[i][k] = max(st[i][k - 1], st[i + (1 << (k - 1))][k - 1]);
+        for (int i = 0; i < n; ++i) st[0][i] = a[i];
+        if (flg) {
+            for (int k = 1; k < N; ++k) {
+                int len = 1 << (k - 1);
+                for (int i = 0; i + (1 << k) - 1 < n; ++i) {
+                    st[k][i] = max(st[k - 1][i], st[k - 1][i + len]);
                 }
-                else {
-                    st[i][k] = min(st[i][k - 1], st[i + (1 << (k - 1))][k - 1]);
+            }
+        }
+        else {
+            for (int k = 1; k < N; ++k) {
+                int len = 1 << (k - 1);
+                for (int i = 0; i + (1 << k) - 1 < n; ++i) {
+                    st[k][i] = min(st[k - 1][i], st[k - 1][i + len]);
                 }
             }
         }
@@ -86,13 +89,12 @@ struct ST {
 
     LL query(int l, int r) {
         if (l > r) return (flg ? -LL_INF : LL_INF);
-        int k = r - l + 1;
-        k = lg[k];
+        int k = lg[r - l + 1];
         if (flg) {
-            return max(st[l][k], st[r - (1 << k) + 1][k]);
+            return max(st[k][l], st[k][r - (1 << k) + 1]);
         }
         else {
-            return min(st[l][k], st[r - (1 << k) + 1][k]);
+            return min(st[k][l], st[k][r - (1 << k) + 1]);
         }
     }
 };
