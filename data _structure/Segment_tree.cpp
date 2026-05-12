@@ -63,13 +63,9 @@ struct T {
     struct Node {
         int l, r;
         LL sm;
+        LL mx;
         LL tag;
-        LL sq;
-        Node() {
-            l = 0, r = 0;
-            sm = 0;
-            tag = 0;
-            sq = 0;
+        Node() : l(0), r(0), sm(0), mx(0), tag(0) {
         }
     };
 
@@ -77,69 +73,92 @@ struct T {
     vector<Node> tr;
 
     void pushup(int u) {
-        Node &ls = tr[u << 1], &rs = tr[u << 1 | 1];
-        tr[u].sm = (ls.sm + rs.sm) % MOD;
-        tr[u].sq = (ls.sq + rs.sq) % MOD;
+        tr[u].sm = tr[u << 1].sm + tr[u << 1 | 1].sm;
+        tr[u].mx = max(tr[u << 1].mx, tr[u << 1 | 1].mx);
     }
 
-    void pushdown(int u, LL v) {
-        v %= MOD;
+    void apply(int u, LL v) {
         LL len = tr[u].r - tr[u].l + 1;
-        tr[u].sq = (tr[u].sq + 2ll * tr[u].sm % MOD * v % MOD + v * v % MOD * len % MOD) % MOD;
-        tr[u].sm = (tr[u].sm + len * v % MOD) % MOD;
-        tr[u].tag = (tr[u].tag + v) % MOD;
+        tr[u].sm += len * v;
+        tr[u].mx += v;
+        tr[u].tag += v;
     }
 
     void pushdown(int u) {
-        Node &ls = tr[u << 1], &rs = tr[u << 1 | 1];
         if (!tr[u].tag) return;
-        pushdown(u << 1, tr[u].tag);
-        pushdown(u << 1 | 1, tr[u].tag);
+        apply(u << 1, tr[u].tag);
+        apply(u << 1 | 1, tr[u].tag);
         tr[u].tag = 0;
     }
 
-    void build(int u, int l, int r) {
+    void build(int u, int l, int r, vector<LL>& a) {
         tr[u].l = l, tr[u].r = r;
-        if (l == r) return;
-        int mid = l + r >> 1;
-        build(u << 1, l, mid);
-        build(u << 1 | 1, mid + 1, r);
+        tr[u].tag = 0;
+        if (l == r) {
+            tr[u].sm = tr[u].mx = a[l];
+            return;
+        }
+        int mid = (l + r) >> 1;
+        build(u << 1, l, mid, a);
+        build(u << 1 | 1, mid + 1, r, a);
         pushup(u);
     }
 
     void add(int u, int ql, int qr, LL v) {
         if (tr[u].l >= ql && tr[u].r <= qr) {
-            pushdown(u, v);
+            apply(u, v);
             return;
         }
-
         pushdown(u);
-        int mid = tr[u].l + tr[u].r >> 1;
+        int mid = (tr[u].l + tr[u].r) >> 1;
         if (ql <= mid) add(u << 1, ql, qr, v);
         if (qr > mid) add(u << 1 | 1, ql, qr, v);
         pushup(u);
     }
 
     LL query(int u, int ql, int qr) {
-        if (tr[u].l >= ql && tr[u].r <= qr) {
-
-        }
-
+        if (tr[u].l >= ql && tr[u].r <= qr) return tr[u].sm;
         pushdown(u);
-        int mid = tr[u].l + tr[u].r >> 1;
-        if (ql <= mid) {
-
-        }
-        if (qr > mid) {
-
-        }
-        pushup(u);
-
-        return 0;
+        int mid = (tr[u].l + tr[u].r) >> 1;
+        LL res = 0;
+        if (ql <= mid) res += query(u << 1, ql, qr);
+        if (qr > mid) res += query(u << 1 | 1, ql, qr);
+        return res;
     }
 
-    T(int _n) : n(_n), tr(4 * _n + 10) {
-        build(1, 1, n);
+    // 找到最小的下标 p，使得 D[p] >= val；不存在则返回 n+1
+    int firstGE(int u, LL val) {
+        if (tr[u].mx < val) return tr[u].r + 1;
+        if (tr[u].l == tr[u].r) return tr[u].l;
+        pushdown(u);
+        if (tr[u << 1].mx >= val) return firstGE(u << 1, val);
+        return firstGE(u << 1 | 1, val);
+    }
+
+    // 找到最小的下标 p,使得 D[p] > val；不存在则返回 n+1
+    int firstGT(int u, LL val) {
+        if (tr[u].mx <= val) return tr[u].r + 1;
+        if (tr[u].l == tr[u].r) return tr[u].l;
+        pushdown(u);
+        if (tr[u << 1].mx > val) return firstGT(u << 1, val);
+        return firstGT(u << 1 | 1, val);
+    }
+
+    T(int _n, vector<LL>& a) : n(_n), tr(4 * _n + 10) {
+        build(1, 1, n, a);
+    }
+
+    void add(int l, int r, LL v) {
+        add(1, l, r, v);
+    }
+    LL query(int l, int r) {
+        return query(1, l, r);
+    }
+    int lower_bound(LL val) {
+        return firstGE(1, val);
+    }
+    int upper_bound(LL val) {
+        return firstGT(1, val);
     }
 };
 void solve() {
