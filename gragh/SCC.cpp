@@ -60,9 +60,6 @@ LL qpow(LL a, LL b) {
     return ans;
 }
 
-#include <bits/stdc++.h>
-using namespace std;
-
 struct SCC {
     // 原图是0-based并且dag 也是0-based!!!
     int n;
