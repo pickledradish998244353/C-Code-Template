@@ -49,21 +49,20 @@ bool cmp(LD a, LD b) {
 }
 
 struct Hash {
-    vector<LL> h, p;
+    vector<ULL> h, p;
     int B = 131;
     Hash(const string& s) {
         int n = s.size();
         h.resize(n + 1, 0);
         p.resize(n + 1, 1);
         for (int i = 0; i < n; ++i) {
-            p[i + 1] = p[i] * B % MOD;
-            h[i + 1] = (h[i] * B + s[i]) % MOD;
+            p[i + 1] = p[i] * B;
+            h[i + 1] = (h[i] * B + s[i]);
         }
     }
     // 给定字符串是0-base, get 是1-base
     LL get(int l, int r) {
-        LL v = h[r] - h[l - 1] * p[r - l + 1] % MOD;
-        v = (v % MOD + MOD) % MOD;
+        LL v = h[r] - h[l - 1] * p[r - l + 1];
         return v;
     }
 };
