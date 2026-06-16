@@ -60,7 +60,7 @@ LL qpow(LL a, LL b) {
 }
 
 vector<LL> dijkstra(int n, int st, const vector<vector<PII>>& g) {
-    vector<LL> d(n, LL_INF);
+    vector<LL> d(n + 1, LL_INF);
     d[st] = 0;
     priority_queue<PLL, vector<PLL>, greater<PLL>> q;
     q.push({0, st});
