@@ -87,6 +87,32 @@ struct Fenwick {
     }
 };
 
+struct MinFenwick {
+    int n;
+    vector<LL> tr;
+
+    MinFenwick(int _n) : n(_n + 1), tr(_n + 1, LL_INF) {
+    }
+
+    int lowbit(int x) {
+        return x & -x;
+    }
+
+    void update(int u, LL x) {
+        if (u <= 0) return;
+        for (int i = u; i < n; i += lowbit(i))
+            tr[i] = min(tr[i], x);
+    }
+
+    LL query(int u) {
+        u = min(u, n - 1);
+        LL ans = LL_INF;
+        for (int i = u; i; i -= lowbit(i))
+            ans = min(ans, tr[i]);
+        return ans;
+    }
+};
+
 LL qpow(LL a, LL b) {
     LL ans = 1;
     a %= MOD;
