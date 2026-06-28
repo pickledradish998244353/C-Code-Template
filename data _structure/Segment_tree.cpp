@@ -161,6 +161,40 @@ struct T {
         return firstGT(1, val);
     }
 };
+
+struct T {
+    int n;
+    vector<int> tr;
+
+    T(int n_) : n(n_), tr(4 * n_, 0) {
+    }
+
+    void update(int p, int val) {
+        update(1, 1, n, p, val);
+    }
+    void update(int u, int l, int r, int p, int val) {
+        if (l == r) {
+            tr[u] = max(tr[u], val);
+            return;
+        }
+        int mid = (l + r) >> 1;
+        if (p <= mid) update(u << 1, l, mid, p, val);
+        else update(u << 1 | 1, mid + 1, r, p, val);
+        tr[u] = max(tr[u << 1], tr[u << 1 | 1]);
+    }
+
+    int query(int ql, int qr) {
+        return query(1, 1, n, ql, qr);
+    }
+    int query(int u, int l, int r, int ql, int qr) {
+        if (ql <= l && r <= qr) return tr[u];
+        int mid = (l + r) >> 1;
+        int res = 0;
+        if (ql <= mid) res = max(res, query(u << 1, l, mid, ql, qr));
+        if (qr > mid) res = max(res, query(u << 1 | 1, mid + 1, r, ql, qr));
+        return res;
+    }
+};
 void solve() {
 /**/ #ifdef LOCAL
     cout << flush;
