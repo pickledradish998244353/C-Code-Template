@@ -52,7 +52,19 @@ struct Fenwick {
     int n;
     vector<LL> tr;
 
-    Fenwick(int _n) : n(_n + 1), tr(_n + 1, 0) {}
+    Fenwick() : n(0) {
+    }
+
+    // 带参构造:
+    Fenwick(int _n) {
+        init(_n);
+    }
+
+    // 初始化函数: 支持延迟初始化
+    void init(int _n) {
+        n = _n + 1;
+        tr.assign(n, 0);
+    }
 
     int lowbit(int x) {
         return x & -x;
