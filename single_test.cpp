@@ -7,6 +7,7 @@
 #define vec2(T, name, n, m, val) vector<vector<T>> name(n, vector<T>(m, val))
 #define vec3(T, name, n, m, k, val) vector<vector<vector<T>>> name(n, vector<vector<T>>(m, vector<T>(k, val)))
 #define vec4(T, name, n, m, k, p, val) vector<vector<vector<vector<T>>>> name((n), vector<vector<vector<T>>>((m), vector<vector<T>>((k), vector<T>((p), (val)))))
+#define pop_cnt(x) __builtin_popcountll((unsigned long long)(x))
 
 using namespace std;
 using i128 = __int128;
