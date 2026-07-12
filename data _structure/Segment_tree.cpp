@@ -59,12 +59,10 @@ LL qpow(LL a, LL b) {
     return ans;
 }
 
-struct T {
+struct Seg {
     struct Node {
         int l, r;
-        LL sm;
-        LL mx;
-        LL tag;
+        LL sm, mx, tag;
         Node() : l(0), r(0), sm(0), mx(0), tag(0) {
         }
     };
@@ -76,14 +74,11 @@ struct T {
         tr[u].sm = tr[u << 1].sm + tr[u << 1 | 1].sm;
         tr[u].mx = max(tr[u << 1].mx, tr[u << 1 | 1].mx);
     }
-
     void apply(int u, LL v) {
-        LL len = tr[u].r - tr[u].l + 1;
-        tr[u].sm += len * v;
+        tr[u].sm += (LL)(tr[u].r - tr[u].l + 1) * v;
         tr[u].mx += v;
         tr[u].tag += v;
     }
-
     void pushdown(int u) {
         if (!tr[u].tag) return;
         apply(u << 1, tr[u].tag);
@@ -91,9 +86,17 @@ struct T {
         tr[u].tag = 0;
     }
 
+    void build(int u, int l, int r) {
+        tr[u].l = l;
+        tr[u].r = r;
+        if (l == r) return;
+        int mid = (l + r) >> 1;
+        build(u << 1, l, mid);
+        build(u << 1 | 1, mid + 1, r);
+    }
     void build(int u, int l, int r, vector<LL>& a) {
-        tr[u].l = l, tr[u].r = r;
-        tr[u].tag = 0;
+        tr[u].l = l;
+        tr[u].r = r;
         if (l == r) {
             tr[u].sm = tr[u].mx = a[l];
             return;
@@ -115,7 +118,6 @@ struct T {
         if (qr > mid) add(u << 1 | 1, ql, qr, v);
         pushup(u);
     }
-
     LL query(int u, int ql, int qr) {
         if (tr[u].l >= ql && tr[u].r <= qr) return tr[u].sm;
         pushdown(u);
@@ -125,8 +127,15 @@ struct T {
         if (qr > mid) res += query(u << 1 | 1, ql, qr);
         return res;
     }
-
-    // 找到最小的下标 p，使得 D[p] >= val；不存在则返回 n+1
+    LL query_mx(int u, int ql, int qr) {
+        if (tr[u].l >= ql && tr[u].r <= qr) return tr[u].mx;
+        pushdown(u);
+        int mid = (tr[u].l + tr[u].r) >> 1;
+        LL res = LLONG_MIN;
+        if (ql <= mid) res = max(res, query_mx(u << 1, ql, qr));
+        if (qr > mid) res = max(res, query_mx(u << 1 | 1, ql, qr));
+        return res;
+    }
     int firstGE(int u, LL val) {
         if (tr[u].mx < val) return tr[u].r + 1;
         if (tr[u].l == tr[u].r) return tr[u].l;
@@ -134,8 +143,6 @@ struct T {
         if (tr[u << 1].mx >= val) return firstGE(u << 1, val);
         return firstGE(u << 1 | 1, val);
     }
-
-    // 找到最小的下标 p,使得 D[p] > val；不存在则返回 n+1
     int firstGT(int u, LL val) {
         if (tr[u].mx <= val) return tr[u].r + 1;
         if (tr[u].l == tr[u].r) return tr[u].l;
@@ -144,7 +151,23 @@ struct T {
         return firstGT(u << 1 | 1, val);
     }
 
-    T(int _n, vector<LL>& a) : n(_n), tr(4 * _n + 10) {
+    Seg() : n(0) {
+    }
+    Seg(int _n) {
+        init(_n);
+    }
+    Seg(int _n, vector<LL>& a) {
+        init(_n, a);
+    }
+
+    void init(int _n) {
+        n = _n;
+        tr.assign(4 * n + 10, Node());
+        build(1, 1, n); // 只设置 l, r，其余保持 0
+    }
+    void init(int _n, vector<LL>& a) {
+        n = _n;
+        tr.assign(4 * n + 10, Node());
         build(1, 1, n, a);
     }
 
@@ -153,6 +176,15 @@ struct T {
     }
     LL query(int l, int r) {
         return query(1, l, r);
+    }
+    LL query_mx(int l, int r) {
+        return query_mx(1, l, r);
+    }
+    LL query_mx() {
+        return tr[1].mx;
+    }
+    LL query_sum() {
+        return tr[1].sm;
     }
     int lower_bound(LL val) {
         return firstGE(1, val);
@@ -166,12 +198,23 @@ struct T {
     int n;
     vector<int> tr;
 
-    T(int n_) : n(n_), tr(4 * n_, 0) {
+    T() : n(0) {
+    }
+
+    T(int n_) {
+        init(n_);
+    }
+
+    void init(int n_) {
+        this->n = n_;
+        tr.assign(4 * n_ + 1, 0); // 使用 assign 重置大小并清零
     }
 
     void update(int p, int val) {
+        if (n == 0) return;
         update(1, 1, n, p, val);
     }
+
     void update(int u, int l, int r, int p, int val) {
         if (l == r) {
             tr[u] = max(tr[u], val);
@@ -184,8 +227,10 @@ struct T {
     }
 
     int query(int ql, int qr) {
+        if (n == 0 || ql > qr) return 0;
         return query(1, 1, n, ql, qr);
     }
+
     int query(int u, int l, int r, int ql, int qr) {
         if (ql <= l && r <= qr) return tr[u];
         int mid = (l + r) >> 1;
@@ -195,6 +240,7 @@ struct T {
         return res;
     }
 };
+
 void solve() {
 /**/ #ifdef LOCAL
     cout << flush;
