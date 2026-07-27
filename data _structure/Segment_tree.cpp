@@ -7,6 +7,7 @@
 #define vec2(T, name, n, m, val) vector<vector<T>> name(n, vector<T>(m, val))
 #define vec3(T, name, n, m, k, val) vector<vector<vector<T>>> name(n, vector<vector<T>>(m, vector<T>(k, val)))
 #define vec4(T, name, n, m, k, p, val) vector<vector<vector<vector<T>>>> name((n), vector<vector<vector<T>>>((m), vector<vector<T>>((k), vector<T>((p), (val)))))
+#define pop_cnt(x) __builtin_popcountll((unsigned long long)(x))
 
 using namespace std;
 using i128 = __int128;
@@ -18,12 +19,13 @@ using PII = pair<int, int>;
 using PLL = pair<LL, LL>;
 using PLD = pair<LD, LD>;
 
-const int N = 2e5 + 10, MOD = 998244353;
+const int N = 1e5 + 10, MOD = 998244353;
 const int INF = 1e9;
-const LL LL_INF = 1e18;
-const LD EPS = 1e-8;
+const LL LL_INF = 2e18;
+const LD EPS = 1e-11;
 const int dx4[] = {-1, 0, 1, 0}, dy4[] = {0, 1, 0, -1};
 const int dx8[] = {-1, -1, -1, 0, 0, 1, 1, 1}, dy8[] = {-1, 0, 1, -1, 1, -1, 0, 1};
+const int hx[] = {-2, -2, -1, -1, 1, 1, 2, 2}, hy[] = {-1, 1, -2, 2, -2, 2, -1, 1};
 
 istream& operator>>(istream& is, i128& val) {
     string str;
@@ -41,6 +43,16 @@ ostream& operator<<(ostream& os, i128 val) {
     if (val > 9) os << val / 10;
     os << static_cast<char>(val % 10 + '0');
     return os;
+}
+
+template <class T>
+auto make_vec(size_t n) {
+    return vector<T>(n);
+}
+
+template <class T, class... Args>
+auto make_vec(size_t n, Args... args) {
+    return vector<decltype(make_vec<T>(args...))>(n, make_vec<T>(args...));
 }
 
 bool cmp(LD a, LD b) {
@@ -118,6 +130,7 @@ struct Seg {
         if (qr > mid) add(u << 1 | 1, ql, qr, v);
         pushup(u);
     }
+
     LL query(int u, int ql, int qr) {
         if (tr[u].l >= ql && tr[u].r <= qr) return tr[u].sm;
         pushdown(u);
@@ -150,6 +163,19 @@ struct Seg {
         if (tr[u << 1].mx > val) return firstGT(u << 1, val);
         return firstGT(u << 1 | 1, val);
     }
+    void assign(int u, int pos, LL v) {
+        if (tr[u].l == tr[u].r) {
+            tr[u].sm = v;
+            tr[u].mx = v;
+            tr[u].tag = 0;
+            return;
+        }
+        pushdown(u);
+        int mid = (tr[u].l + tr[u].r) >> 1;
+        if (pos <= mid) assign(u << 1, pos, v);
+        else assign(u << 1 | 1, pos, v);
+        pushup(u);
+    }
 
     Seg() : n(0) {
     }
@@ -171,6 +197,9 @@ struct Seg {
         build(1, 1, n, a);
     }
 
+    void assign(int pos, LL v) {
+        assign(1, pos, v);
+    }
     void add(int l, int r, LL v) {
         add(1, l, r, v);
     }
