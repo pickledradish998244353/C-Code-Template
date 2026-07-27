@@ -88,9 +88,11 @@ struct Fenwick {
     }
 
     LL kth(LL k) {
+        int lg = 31 - __builtin_clz(n);
+        int up = 1 << lg;
         int x = 0;
-        for (int p = 1 << 20; p; p >>= 1) {
-            if (x + p <= n && tr[x + p] < k) {
+        for (int p = up; p; p >>= 1) {
+            if (x + p < n && tr[x + p] < k) {
                 k -= tr[x + p];
                 x += p;
             }
