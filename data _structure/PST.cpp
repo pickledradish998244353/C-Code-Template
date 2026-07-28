@@ -107,6 +107,64 @@ struct PST {
     }
 };
 
+struct KPST {
+    int idx, m;
+    vector<int> rt;
+
+    struct Node {
+        int ls, rs, sm;
+        Node() : ls(0), rs(0), sm(0) {
+        }
+    };
+    vector<Node> tr;
+
+    KPST(int n, int m) {
+        idx = 0;
+        this->m = m;
+        rt.assign(n + 1, 0);
+        tr.resize((n + 5) * 40);
+    }
+
+    int clone(int p) {
+        tr[++idx] = tr[p];
+        return idx;
+    }
+
+    int modify(int u, int l, int r, int pos, int v) {
+        int nw = clone(u);
+        tr[nw].sm += v;
+        if (l == r) return nw;
+
+        int mid = (l + r) >> 1;
+        if (pos <= mid) tr[nw].ls = modify(tr[u].ls, l, mid, pos, v);
+        else tr[nw].rs = modify(tr[u].rs, mid + 1, r, pos, v);
+
+        return nw;
+    }
+
+    int kth_small(int u, int v, int l, int r, int k) {
+        if (l == r) return l;
+        int mid = (l + r) >> 1;
+        int cntLeft = tr[tr[v].ls].sm - tr[tr[u].ls].sm;
+
+        if (k <= cntLeft)
+            return kth_small(tr[u].ls, tr[v].ls, l, mid, k);
+        else
+            return kth_small(tr[u].rs, tr[v].rs, mid + 1, r, k - cntLeft);
+    }
+
+    int kth_big(int u, int v, int l, int r, int k) {
+        if (l == r) return l;
+        int mid = (l + r) >> 1;
+        int cntRight = tr[tr[v].rs].sm - tr[tr[u].rs].sm;
+
+        if (k <= cntRight)
+            return kth_big(tr[u].rs, tr[v].rs, mid + 1, r, k);
+        else
+            return kth_big(tr[u].ls, tr[v].ls, l, mid, k - cntRight);
+    }
+};
+
 void solve() {
 /**/ #ifdef LOCAL
     cout << flush;
