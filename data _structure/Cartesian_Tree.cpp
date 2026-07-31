@@ -54,7 +54,7 @@ LL qpow(LL a, LL b) {
     a %= MOD;
     while (b) {
         if (b & 1) ans = ans * a % MOD;
-        a = a * a % MOD;
+        a = a * a % MOD; 
         b >>= 1;
     }
     return ans;
