@@ -60,12 +60,15 @@ LL qpow(LL a, LL b) {
     return ans;
 }
 
-struct T {
+struct FHQ {
+    using LL = long long;
+
     struct Node {
-        int l, r;
-        int sz, cnt;
-        unsigned pri;
-        LL v;
+        int l = 0, r = 0;
+        int sz = 0, cnt = 0;
+        unsigned pri = 0;
+        LL v = 0;
+
         void init(LL _v, unsigned _pri) {
             l = r = 0;
             sz = cnt = 1;
@@ -74,32 +77,40 @@ struct T {
         }
     };
 
-    int root, idx;
+    int root = 0, idx = 0;
     vector<Node> tr;
-    vector<int> q;
+    vector<int> gc;
     mt19937 rng;
 
-    T(int _n) : root(0), idx(0), tr(_n + 10), rng(chrono::steady_clock::now().time_since_epoch().count()) {
+    FHQ(int max_node = 0)
+        : tr(max_node + 5),
+          rng((unsigned)chrono::steady_clock::now().time_since_epoch().count()) {
     }
 
-    int get_node(LL v) {
+    void expand_if_needed() {
+        if (idx + 1 >= (int)tr.size()) {
+            tr.resize((int)tr.size() * 2 + 5);
+        }
+    }
+
+    int new_node(LL v) {
         int u;
-        if (!q.empty()) {
-            u = q.back();
-            q.pop_back();
+        if (!gc.empty()) {
+            u = gc.back();
+            gc.pop_back();
         }
         else {
+            expand_if_needed();
             u = ++idx;
         }
         tr[u].init(v, rng());
         return u;
     }
 
-    void del(int u) {
-        tr[u].l = tr[u].r = tr[u].sz = tr[u].cnt = 0;
-        tr[u].pri = 0;
-        tr[u].v = 0;
-        q.push_back(u);
+    void recycle(int u) {
+        if (!u) return;
+        tr[u] = Node();
+        gc.push_back(u);
     }
 
     void pushup(int u) {
@@ -107,19 +118,42 @@ struct T {
         tr[u].sz = tr[tr[u].l].sz + tr[tr[u].r].sz + tr[u].cnt;
     }
 
-    void split(int u, LL v, int& x, int& y) {
+    // 分裂成:
+    // x: 所有 key < v
+    // y: 所有 key >= v
+    void splitLess(int u, LL v, int& x, int& y) {
+        if (!u) {
+            x = y = 0;
+            return;
+        }
+        if (tr[u].v < v) {
+            x = u;
+            splitLess(tr[u].r, v, tr[u].r, y);
+            pushup(u);
+        }
+        else {
+            y = u;
+            splitLess(tr[u].l, v, x, tr[u].l);
+            pushup(u);
+        }
+    }
+
+    // 分裂成:
+    // x: 所有 key <= v
+    // y: 所有 key > v
+    void splitLE(int u, LL v, int& x, int& y) {
         if (!u) {
             x = y = 0;
             return;
         }
         if (tr[u].v <= v) {
             x = u;
-            split(tr[u].r, v, tr[u].r, y);
+            splitLE(tr[u].r, v, tr[u].r, y);
             pushup(u);
         }
         else {
             y = u;
-            split(tr[u].l, v, x, tr[u].l);
+            splitLE(tr[u].l, v, x, tr[u].l);
             pushup(u);
         }
     }
@@ -138,47 +172,91 @@ struct T {
         }
     }
 
+    // 插入一个 val
     void insert(LL val) {
         int a, b, c;
-        split(root, val, a, c);
-        split(a, val - 1, a, b);
+        splitLess(root, val, a, b); // a < val, b >= val
+        splitLE(b, val, b, c);      // b == val, c > val
+
         if (b) {
             tr[b].cnt++;
             pushup(b);
         }
         else {
-            b = get_node(val);
+            b = new_node(val);
         }
-        root = merge(merge(a, b), c);
+
+        root = merge(a, merge(b, c));
     }
 
+    // 删除一个 val（如果存在）
     void remove(LL val) {
         int a, b, c;
-        split(root, val, a, c);
-        split(a, val - 1, a, b);
+        splitLess(root, val, a, b); // a < val, b >= val
+        splitLE(b, val, b, c);      // b == val, c > val
+
         if (b) {
             if (tr[b].cnt > 1) {
                 tr[b].cnt--;
                 pushup(b);
             }
             else {
-                del(b);
-                b = 0;
+                int t = merge(tr[b].l, tr[b].r);
+                recycle(b);
+                b = t;
             }
         }
-        root = merge(merge(a, b), c);
+
+        root = merge(a, merge(b, c));
     }
 
+    // 返回 val 的出现次数
+    int count(LL val) {
+        int a, b, c;
+        splitLess(root, val, a, b);
+        splitLE(b, val, b, c);
+
+        int res = b ? tr[b].cnt : 0;
+        root = merge(a, merge(b, c));
+        return res;
+    }
+
+    // 是否存在 val
+    bool find(LL val) {
+        int a, b, c;
+        splitLess(root, val, a, b);
+        splitLE(b, val, b, c);
+
+        bool res = (b != 0);
+        root = merge(a, merge(b, c));
+        return res;
+    }
+
+    // 总元素个数（包含重复）
+    int size() const {
+        return tr[root].sz;
+    }
+
+    bool empty() const {
+        return root == 0;
+    }
+
+    // 1-based 排名：
+    // 返回 1 + #(元素 < val)
+    // 也就是 val 如果插进去，会在第几个位置
     int get_rank(LL val) {
         int a, b;
-        split(root, val - 1, a, b);
-        int res = tr[a].sz;
+        splitLess(root, val, a, b);
+        int res = tr[a].sz + 1;
         root = merge(a, b);
         return res;
     }
 
+    // 1-based 第 k 小
+    // 越界返回 -1
     LL get_k(int k) {
-        k++;
+        if (k < 1 || k > size()) return -1;
+
         int u = root;
         while (u) {
             int lsz = tr[tr[u].l].sz;
@@ -196,8 +274,11 @@ struct T {
         return -1;
     }
 
+    // 1-based 第 k 小所在节点编号
+    // 越界返回 0
     int get_k_ptr(int k) {
-        k++;
+        if (k < 1 || k > size()) return 0;
+
         int u = root;
         while (u) {
             int lsz = tr[tr[u].l].sz;
@@ -212,43 +293,50 @@ struct T {
                 u = tr[u].r;
             }
         }
-        return -1;
+        return 0;
     }
 
+    // 严格前驱：< val 的最大值
+    // 不存在返回 -1
     LL get_pre(LL val) {
         int a, b;
-        split(root, val - 1, a, b);
-        int u = a;
-        if (!u) {
+        splitLess(root, val, a, b); // a < val, b >= val
+
+        if (!a) {
             root = merge(a, b);
             return -1;
         }
+
+        int u = a;
         while (tr[u].r) u = tr[u].r;
         LL res = tr[u].v;
+
         root = merge(a, b);
         return res;
     }
 
+    // 严格后继：> val 的最小值
+    // 不存在返回 -1
     LL get_nxt(LL val) {
         int a, b;
-        split(root, val, a, b);
-        int u = b;
-        if (!u) {
+        splitLE(root, val, a, b); // a <= val, b > val
+
+        if (!b) {
             root = merge(a, b);
             return -1;
         }
+
+        int u = b;
         while (tr[u].l) u = tr[u].l;
         LL res = tr[u].v;
+
         root = merge(a, b);
         return res;
-    }
-
-    void find(LL val) {
     }
 };
 
 void solve() {
-    
+
 /**/ #ifdef LOCAL
     cout << flush;
 /**/ #endif
