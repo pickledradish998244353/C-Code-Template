@@ -61,11 +61,15 @@ LL qpow(LL a, LL b) {
 
 struct Random {
     mt19937_64 rng;
-    Random() : rng(chrono::steady_clock::now().time_since_epoch().count()) {}
+    Random() : rng(chrono::steady_clock::now().time_since_epoch().count()) {
+    }
 
     LL get64(LL l, LL r) {
         if (l > r) return l;
         return uniform_int_distribution<LL>(l, r)(rng);
+    }
+    unsigned long long get64() {
+        return rng();
     }
 
     LD getf(LD l, LD r) {
