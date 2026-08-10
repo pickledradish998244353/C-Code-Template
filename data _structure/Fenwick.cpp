@@ -25,18 +25,18 @@ const LD EPS = 1e-8;
 const int dx4[] = {-1, 0, 1, 0}, dy4[] = {0, 1, 0, -1};
 const int dx8[] = {-1, -1, -1, 0, 0, 1, 1, 1}, dy8[] = {-1, 0, 1, -1, 1, -1, 0, 1};
 
-istream &operator>>(istream &is, i128 &val) {
+istream& operator>>(istream& is, i128& val) {
     string str;
     is >> str;
     val = 0;
     bool flag = false;
     if (str[0] == '-') flag = true, str = str.substr(1);
-    for (char &c: str) val = val * 10 + c - '0';
+    for (char& c : str) val = val * 10 + c - '0';
     if (flag) val = -val;
     return is;
 }
 
-ostream &operator<<(ostream &os, i128 val) {
+ostream& operator<<(ostream& os, i128 val) {
     if (val < 0) os << "-", val = -val;
     if (val > 9) os << val / 10;
     os << static_cast<char>(val % 10 + '0');
@@ -87,6 +87,7 @@ struct Fenwick {
         return query(b) - query(a - 1);
     }
 
+    // 第k个1在哪
     LL kth(LL k) {
         int lg = 31 - __builtin_clz(n);
         int up = 1 << lg;
