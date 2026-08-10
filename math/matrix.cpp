@@ -61,15 +61,15 @@ LL qpow(LL a, LL b) {
 }
 
 template <int MOD>
-struct Matrix {
+struct Mat {
     int n, m;
     vector<vector<i64>> a;
 
-    Matrix(int n, int m) : n(n), m(m), a(n, vector<i64>(m, 0)) {
+    Mat(int n, int m) : n(n), m(m), a(n, vector<i64>(m, 0)) {
     }
-    Matrix(int n) : Matrix(n, n) {
+    Mat(int n) : Mat(n, n) {
     }
-    Matrix(const vector<vector<i64>>& v)
+    Mat(const vector<vector<i64>>& v)
         : n(v.size()), m(v.empty() ? 0 : v[0].size()), a(v) {
     }
 
@@ -86,9 +86,9 @@ struct Matrix {
         return I;
     }
 
-    Matrix operator*(const Matrix& o) const {
+    Mat operator*(const Mat& o) const {
         assert(m == o.n);
-        Matrix c(n, o.m);
+        Mat c(n, o.m);
         for (int i = 0; i < n; i++) {
             for (int k = 0; k < m; k++) {
                 if (!a[i][k]) continue;
@@ -101,33 +101,21 @@ struct Matrix {
         return c;
     }
 
-    Matrix& operator*=(const Matrix& o) {
+    Mat& operator*=(const Matrix& o) {
         return *this = *this * o;
     }
 
-    Matrix operator+(const Matrix& o) const {
+    Mat operator+(const Mat& o) const {
         assert(n == o.n && m == o.m);
-        Matrix c(n, m);
+        Mat c(n, m);
         for (int i = 0; i < n; i++)
             for (int j = 0; j < m; j++)
                 c.a[i][j] = (a[i][j] + o.a[i][j]) % MOD;
         return c;
     }
-
-    // 快速幂（仅方阵）
-    Matrix power(i64 p) const {
-        assert(n == m);
-        Matrix res = identity(n), base = *this;
-        while (p) {
-            if (p & 1) res *= base;
-            base *= base;
-            p >>= 1;
-        }
-        return res;
-    }
 };
 void solve() {
-    
+
 /**/ #ifdef LOCAL
     cout << flush;
 /**/ #endif
@@ -143,4 +131,3 @@ int main() {
 
     return 0;
 }
-
