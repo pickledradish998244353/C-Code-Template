@@ -25,18 +25,18 @@ const LD EPS = 1e-8;
 const int dx4[] = {-1, 0, 1, 0}, dy4[] = {0, 1, 0, -1};
 const int dx8[] = {-1, -1, -1, 0, 0, 1, 1, 1}, dy8[] = {-1, 0, 1, -1, 1, -1, 0, 1};
 
-istream &operator>>(istream &is, i128 &val) {
+istream& operator>>(istream& is, i128& val) {
     string str;
     is >> str;
     val = 0;
     bool flag = false;
     if (str[0] == '-') flag = true, str = str.substr(1);
-    for (char &c: str) val = val * 10 + c - '0';
+    for (char& c : str) val = val * 10 + c - '0';
     if (flag) val = -val;
     return is;
 }
 
-ostream &operator<<(ostream &os, i128 val) {
+ostream& operator<<(ostream& os, i128 val) {
     if (val < 0) os << "-", val = -val;
     if (val > 9) os << val / 10;
     os << static_cast<char>(val % 10 + '0');
@@ -63,21 +63,24 @@ struct Comb {
     int n;
     vector<LL> fact, infact;
     Comb(int _n) : n(_n + 1), fact(_n + 1), infact(_n + 1) {
-        fact[0] = 1, infact[0] = 1;
-        for (LL i = 1; i < _n; ++i) {
+        fact[0] = 1;
+        for (int i = 1; i < n; ++i) {
             fact[i] = fact[i - 1] * i % MOD;
-            infact[i] = qpow(fact[i], MOD - 2) % MOD;
+        }
+        infact[n - 1] = qpow(fact[n - 1], MOD - 2);
+        for (int i = n - 2; i >= 0; --i) {
+            infact[i] = infact[i + 1] * (i + 1) % MOD;
         }
     };
 
     LL C(LL a, LL b) {
         if (a < b || b < 0) return 0;
-        return fact[a] % MOD * infact[b] % MOD * infact[a - b] % MOD;
+        return fact[a] * infact[b] % MOD * infact[a - b] % MOD;
     }
 
     LL lucas(LL a, LL b) {
-        if (a < MOD && b < MOD) return C(a, b);
-        return lucas(a / MOD, b / MOD) * lucas(a % MOD, b % MOD) % MOD;
+        if (b == 0) return 1;
+        return lucas(a / MOD, b / MOD) * C(a % MOD, b % MOD) % MOD;
     }
 };
 
