@@ -1,0 +1,68 @@
+{
+    "[cpp]": {
+        "editor.wordBasedSuggestions": "off",
+        "editor.semanticHighlighting.enabled": true,
+        "editor.stickyScroll.defaultModel": "foldingProviderModel",
+        "editor.suggest.insertMode": "replace",
+        "editor.formatOnPaste": true,
+        "editor.tabSize": 4,
+        "editor.formatOnType": true,
+        // 强制指定使用微软官方 C/C++ 插件作为格式化器
+        "editor.defaultFormatter": "ms-vscode.cpptools"
+    },
+    "editor.fontSize": 16,
+    "editor.fontFamily": "Fira Code",
+    "editor.fontLigatures": "'calt', 'ss01', 'zero'",
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true,
+    "editor.detectIndentation": false, // 建议设为 false，以 .clang-format 为准
+    // 建议开启：保存时自动格式化
+    "editor.formatOnSave": true,
+    "editor.formatOnType": true,
+    // --- C++ 格式化关键配置 ---
+    "C_Cpp.formatting": "clangFormat", // 使用 clangFormat 引擎
+    "C_Cpp.clang_format_style": "file", // 告诉它：去读项目里的 .clang-format 文件
+    "C_Cpp.clang_format_fallbackStyle": "LLVM", // 万一文件坏了，用这个兜底
+    // 如果你没在终端安装 clang-format，就把下面这行注释掉或删除
+    // "clang-format.executable": "...", 
+    // --- 以下是你原来的其他配置，保持不变 ---
+    "workbench.colorCustomizations": {
+        "[Dark 2026]": {
+            "editor.background": "#333333",
+            "sideBar.background": "#2a2a2a",
+            "activityBar.background": "#2a2a2a",
+            "editorStickyScroll.background": "#333333",
+            "breadcrumb.background": "#333333",
+            "editorGroupHeader.tabsBackground": "#2a2a2a",
+            "terminal.background": "#252525",
+            "editorGutter.background": "#333333",
+            "editor.lineHighlightBackground": "#3d3d3d",
+            "editorLineNumber.activeForeground": "#4fc1ff",
+            "sideBar.border": "#444444",
+            "editorGroup.border": "#444444",
+            "tab.inactiveBackground": "#2a2a2a",
+            "tab.activeBackground": "#333333",
+            "tab.activeForeground": "#ffffff"
+        }
+    },
+    "editor.semanticTokenColorCustomizations": {
+        "enabled": true,
+        "rules": {
+            "macro": "#4EC9B0",
+            "macro.constant": "#4EC9B0",
+            "variable.readonly": "#4EC9B0",
+            "entity.name.constant": "#4EC9B0"
+        }
+    },
+    "window.systemColorTheme": "dark",
+    "window.titleBarStyle": "custom",
+    "terminal.integrated.enableMultiLinePasteWarning": "never",
+    "debug.onTaskErrors": "showErrors",
+    "editor.guides.indentation": false,
+    "terminal.integrated.fontSize": 14,
+    "C_Cpp.vcFormat.indent.preprocessor": "none",
+    "git.autofetch": true,
+    "explorer.confirmDelete": false,
+    "cph.general.defaultLanguage": "cpp",
+    "cph.language.cpp.Args": "-O2 -Wall -std=c++20"
+}
