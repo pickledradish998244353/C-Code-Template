@@ -3,11 +3,9 @@
 #define x first
 #define y second
 #define all(x) x.begin(), x.end()
-#define vec1(T, name, n, val) vector<T> name(n, val)
-#define vec2(T, name, n, m, val) vector<vector<T>> name(n, vector<T>(m, val))
-#define vec3(T, name, n, m, k, val) vector<vector<vector<T>>> name(n, vector<vector<T>>(m, vector<T>(k, val)))
-#define vec4(T, name, n, m, k, p, val) vector<vector<vector<vector<T>>>> name((n), vector<vector<vector<T>>>((m), vector<vector<T>>((k), vector<T>((p), (val)))))
 #define pop_cnt(x) __builtin_popcountll((unsigned long long)(x))
+#define blz32(x) ((x) == 0 ? 0 : 32 - __builtin_clz((unsigned int)(x)))
+#define blz64(x) ((x) == 0 ? 0 : 64 - __builtin_clzll((unsigned long long)(x)))
 
 using namespace std;
 using i128 = __int128;
@@ -53,11 +51,6 @@ auto make_vec(size_t n) {
 template <class T, class... Args>
 auto make_vec(size_t n, Args... args) {
     return vector<decltype(make_vec<T>(args...))>(n, make_vec<T>(args...));
-}
-
-bool cmp(LD a, LD b) {
-    if (fabs(a - b) < EPS) return 1;
-    return 0;
 }
 
 LL qpow(LL a, LL b) {
