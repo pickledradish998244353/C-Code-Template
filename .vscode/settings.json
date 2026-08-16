@@ -27,7 +27,7 @@
     // "clang-format.executable": "...", 
     // --- 以下是你原来的其他配置，保持不变 ---
     "workbench.colorCustomizations": {
-        "[Dark+]": {
+        "[Dark 2026]": {
             "editor.background": "#333333",
             "sideBar.background": "#2a2a2a",
             "activityBar.background": "#2a2a2a",

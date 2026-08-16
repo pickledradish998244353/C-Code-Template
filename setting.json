@@ -20,7 +20,6 @@
     "editor.autoClosingDelete": "always",
     "editor.autoClosingBrackets": "beforeWhitespace",
     "C_Cpp.clang_format_fallbackStyle": "{ BasedOnStyle: LLVM, UseTab: Never, IndentWidth: 4, TabWidth: 4, IndentPPDirectives: BeforeHash, BreakBeforeBraces: Attach, AllowShortFunctionsOnASingleLine: true, ColumnLimit: 0, AccessModifierOffset: -4, SpaceBeforeParens: ControlStatements }",
-
     "workbench.colorCustomizations": {
         "[Dark 2026]": {
             "editor.background": "#333333",
@@ -49,7 +48,6 @@
             "entity.name.constant": "#4EC9B0"
         }
     },
-
     "window.systemColorTheme": "dark",
     "window.titleBarStyle": "custom",
     "terminal.integrated.enableMultiLinePasteWarning": "never",
