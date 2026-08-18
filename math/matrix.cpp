@@ -83,7 +83,6 @@ struct Mat {
     }
 
     Mat operator*(const Mat& o) const {
-        assert(m == o.n);
         Mat c(n, o.m);
         for (int i = 0; i < n; i++) {
             for (int k = 0; k < m; k++) {
@@ -102,7 +101,6 @@ struct Mat {
     }
 
     Mat power(LL b) const {
-        assert(n == m);
         Mat res = identity(n);
         Mat base = *this;
         while (b) {
