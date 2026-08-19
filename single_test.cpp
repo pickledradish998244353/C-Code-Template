@@ -13,9 +13,9 @@ using u128 = unsigned __int128;
 using LL = long long;
 using LD = long double;
 using ULL = unsigned long long;
-using PII = pair<int, int>;
-using PLL = pair<LL, LL>;
-using PLD = pair<LD, LD>;
+using pii = pair<int, int>;
+using pll = pair<LL, LL>;
+using pld = pair<LD, LD>;
 
 const int N = 1e5 + 10, MOD = 998244353;
 const int INF = 1e9;
