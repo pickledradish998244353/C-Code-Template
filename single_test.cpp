@@ -44,13 +44,13 @@ ostream& operator<<(ostream& os, i128 val) {
 }
 
 template <class T>
-auto make_vec(size_t n) {
+auto vec(size_t n) {
     return vector<T>(n);
 }
 
 template <class T, class... Args>
-auto make_vec(size_t n, Args... args) {
-    return vector<decltype(make_vec<T>(args...))>(n, make_vec<T>(args...));
+auto vec(size_t n, Args... args) {
+    return vector<decltype(vec<T>(args...))>(n, vec<T>(args...));
 }
 
 LL qpow(LL a, LL b) {
