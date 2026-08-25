@@ -10,17 +10,17 @@
 using namespace std;
 using i128 = __int128;
 using u128 = unsigned __int128;
-using LL = long long;
-using LD = long double;
-using ULL = unsigned long long;
+using ll = long long;
+using ld = long double;
+using ull = unsigned long long;
 using pii = pair<int, int>;
-using pll = pair<LL, LL>;
-using pld = pair<LD, LD>;
+using pll = pair<ll, ll>;
+using pld = pair<ld, ld>;
 
 const int N = 1e5 + 10, MOD = 998244353;
 const int INF = 1e9;
-const LL LL_INF = 2e18;
-const LD EPS = 1e-11;
+const ll LL_INF = 2e18;
+const ld eps = 1e-11;
 const int dx4[] = {-1, 0, 1, 0}, dy4[] = {0, 1, 0, -1};
 const int dx8[] = {-1, -1, -1, 0, 0, 1, 1, 1}, dy8[] = {-1, 0, 1, -1, 1, -1, 0, 1};
 const int hx[] = {-2, -2, -1, -1, 1, 1, 2, 2}, hy[] = {-1, 1, -2, 2, -2, 2, -1, 1};
@@ -53,8 +53,8 @@ auto vec(size_t n, Args... args) {
     return vector<decltype(vec<T>(args...))>(n, vec<T>(args...));
 }
 
-LL qpow(LL a, LL b) {
-    LL ans = 1;
+ll qpow(ll a, ll b) {
+    ll ans = 1;
     a %= MOD;
     while (b) {
         if (b & 1) ans = ans * a % MOD;
@@ -65,6 +65,7 @@ LL qpow(LL a, LL b) {
 }
 
 void solve() {
+
 /**/ #ifdef LOCAL
     cout << flush;
 /**/ #endif
