@@ -11,16 +11,16 @@
 using namespace std;
 using i128 = __int128;
 using u128 = unsigned __int128;
-using LL = long long;
+using ll = long long;
 using LD = long double;
 using ULL = unsigned long long;
 using PII = pair<int, int>;
-using PLL = pair<LL, LL>;
+using PLL = pair<ll, ll>;
 using PLD = pair<LD, LD>;
 
 const int N = 1e5 + 10, MOD = 998244353;
 const int INF = 1e9;
-const LL LL_INF = 1e18;
+const ll LL_INF = 1e18;
 const LD EPS = 1e-8;
 const int dx4[] = {-1, 0, 1, 0}, dy4[] = {0, 1, 0, -1};
 const int dx8[] = {-1, -1, -1, 0, 0, 1, 1, 1}, dy8[] = {-1, 0, 1, -1, 1, -1, 0, 1};
@@ -48,8 +48,8 @@ bool cmp(LD a, LD b) {
     return 0;
 }
 
-LL qpow(LL a, LL b) {
-    LL ans = 1;
+ll qpow(ll a, ll b) {
+    ll ans = 1;
     a %= MOD;
     while (b) {
         if (b & 1) ans = ans * a % MOD;
@@ -63,10 +63,10 @@ struct ST {
     const int N = 30;
     int n;
     int flg;
-    vector<LL> lg;
-    vector<vector<LL>> st;
+    vector<ll> lg;
+    vector<vector<ll>> st;
 
-    ST(int _n, int _flg, const vector<LL>& a) : n(_n), lg(_n + 1), flg(_flg), st(N, vector<LL>(_n + 1)) {
+    ST(int _n, int _flg, const vector<ll>& a) : n(_n), lg(_n + 1), flg(_flg), st(N, vector<ll>(_n + 1)) {
         for (int i = 2; i <= n; ++i) lg[i] = lg[i / 2] + 1;
         for (int i = 0; i < n; ++i) st[0][i] = a[i];
         if (flg) {
@@ -87,7 +87,7 @@ struct ST {
         }
     }
 
-    LL query(int l, int r) {
+    ll query(int l, int r) {
         if (l > r) return (flg ? -LL_INF : LL_INF);
         int k = lg[r - l + 1];
         if (flg) {

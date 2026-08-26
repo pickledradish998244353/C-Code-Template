@@ -12,16 +12,16 @@
 using namespace std;
 using i128 = __int128;
 using u128 = unsigned __int128;
-using LL = long long;
+using ll = long long;
 using LD = long double;
 using ULL = unsigned long long;
 using PII = pair<int, int>;
-using PLL = pair<LL, LL>;
+using PLL = pair<ll, ll>;
 using PLD = pair<LD, LD>;
 
 const int N = 1e5 + 10, MOD = 998244353;
 const int INF = 1e9;
-const LL LL_INF = 2e18;
+const ll LL_INF = 2e18;
 const LD EPS = 1e-11;
 const int dx4[] = {-1, 0, 1, 0}, dy4[] = {0, 1, 0, -1};
 const int dx8[] = {-1, -1, -1, 0, 0, 1, 1, 1}, dy8[] = {-1, 0, 1, -1, 1, -1, 0, 1};
@@ -60,8 +60,8 @@ bool cmp(LD a, LD b) {
     return 0;
 }
 
-LL qpow(LL a, LL b) {
-    LL ans = 1;
+ll qpow(ll a, ll b) {
+    ll ans = 1;
     a %= MOD;
     while (b) {
         if (b & 1) ans = ans * a % MOD;
@@ -74,7 +74,7 @@ LL qpow(LL a, LL b) {
 struct Seg {
     struct Node {
         int l, r;
-        LL sm, mx, tag;
+        ll sm, mx, tag;
         Node() : l(0), r(0), sm(0), mx(0), tag(0) {
         }
     };
@@ -86,8 +86,8 @@ struct Seg {
         tr[u].sm = tr[u << 1].sm + tr[u << 1 | 1].sm;
         tr[u].mx = max(tr[u << 1].mx, tr[u << 1 | 1].mx);
     }
-    void apply(int u, LL v) {
-        tr[u].sm += (LL)(tr[u].r - tr[u].l + 1) * v;
+    void apply(int u, ll v) {
+        tr[u].sm += (ll)(tr[u].r - tr[u].l + 1) * v;
         tr[u].mx += v;
         tr[u].tag += v;
     }
@@ -106,7 +106,7 @@ struct Seg {
         build(u << 1, l, mid);
         build(u << 1 | 1, mid + 1, r);
     }
-    void build(int u, int l, int r, vector<LL>& a) {
+    void build(int u, int l, int r, vector<ll>& a) {
         tr[u].l = l;
         tr[u].r = r;
         if (l == r) {
@@ -119,7 +119,7 @@ struct Seg {
         pushup(u);
     }
 
-    void add(int u, int ql, int qr, LL v) {
+    void add(int u, int ql, int qr, ll v) {
         if (tr[u].l >= ql && tr[u].r <= qr) {
             apply(u, v);
             return;
@@ -131,39 +131,39 @@ struct Seg {
         pushup(u);
     }
 
-    LL query(int u, int ql, int qr) {
+    ll query(int u, int ql, int qr) {
         if (tr[u].l >= ql && tr[u].r <= qr) return tr[u].sm;
         pushdown(u);
         int mid = (tr[u].l + tr[u].r) >> 1;
-        LL res = 0;
+        ll res = 0;
         if (ql <= mid) res += query(u << 1, ql, qr);
         if (qr > mid) res += query(u << 1 | 1, ql, qr);
         return res;
     }
-    LL query_mx(int u, int ql, int qr) {
+    ll query_mx(int u, int ql, int qr) {
         if (tr[u].l >= ql && tr[u].r <= qr) return tr[u].mx;
         pushdown(u);
         int mid = (tr[u].l + tr[u].r) >> 1;
-        LL res = LLONG_MIN;
+        ll res = LLONG_MIN;
         if (ql <= mid) res = max(res, query_mx(u << 1, ql, qr));
         if (qr > mid) res = max(res, query_mx(u << 1 | 1, ql, qr));
         return res;
     }
-    int firstGE(int u, LL val) {
+    int firstGE(int u, ll val) {
         if (tr[u].mx < val) return tr[u].r + 1;
         if (tr[u].l == tr[u].r) return tr[u].l;
         pushdown(u);
         if (tr[u << 1].mx >= val) return firstGE(u << 1, val);
         return firstGE(u << 1 | 1, val);
     }
-    int firstGT(int u, LL val) {
+    int firstGT(int u, ll val) {
         if (tr[u].mx <= val) return tr[u].r + 1;
         if (tr[u].l == tr[u].r) return tr[u].l;
         pushdown(u);
         if (tr[u << 1].mx > val) return firstGT(u << 1, val);
         return firstGT(u << 1 | 1, val);
     }
-    void assign(int u, int pos, LL v) {
+    void assign(int u, int pos, ll v) {
         if (tr[u].l == tr[u].r) {
             tr[u].sm = v;
             tr[u].mx = v;
@@ -182,7 +182,7 @@ struct Seg {
     Seg(int _n) {
         init(_n);
     }
-    Seg(int _n, vector<LL>& a) {
+    Seg(int _n, vector<ll>& a) {
         init(_n, a);
     }
 
@@ -191,34 +191,34 @@ struct Seg {
         tr.assign(4 * n + 10, Node());
         build(1, 1, n); // 只设置 l, r，其余保持 0
     }
-    void init(int _n, vector<LL>& a) {
+    void init(int _n, vector<ll>& a) {
         n = _n;
         tr.assign(4 * n + 10, Node());
         build(1, 1, n, a);
     }
 
-    void assign(int pos, LL v) {
+    void assign(int pos, ll v) {
         assign(1, pos, v);
     }
-    void add(int l, int r, LL v) {
+    void add(int l, int r, ll v) {
         add(1, l, r, v);
     }
-    LL query(int l, int r) {
+    ll query(int l, int r) {
         return query(1, l, r);
     }
-    LL query_mx(int l, int r) {
+    ll query_mx(int l, int r) {
         return query_mx(1, l, r);
     }
-    LL query_mx() {
+    ll query_mx() {
         return tr[1].mx;
     }
-    LL query_sum() {
+    ll query_sum() {
         return tr[1].sm;
     }
-    int lower_bound(LL val) {
+    int lower_bound(ll val) {
         return firstGE(1, val);
     }
-    int upper_bound(LL val) {
+    int upper_bound(ll val) {
         return firstGT(1, val);
     }
 };

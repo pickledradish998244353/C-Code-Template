@@ -11,16 +11,16 @@
 using namespace std;
 using i128 = __int128;
 using u128 = unsigned __int128;
-using LL = long long;
+using ll = long long;
 using LD = long double;
 using ULL = unsigned long long;
 using PII = pair<int, int>;
-using PLL = pair<LL, LL>;
+using PLL = pair<ll, ll>;
 using PLD = pair<LD, LD>;
 
 const int N = 1e5 + 10, MOD = 998244353;
 const int INF = 1e9;
-const LL LL_INF = 2e18;
+const ll LL_INF = 2e18;
 const LD EPS = 1e-8;
 const int dx4[] = {-1, 0, 1, 0}, dy4[] = {0, 1, 0, -1};
 const int dx8[] = {-1, -1, -1, 0, 0, 1, 1, 1}, dy8[] = {-1, 0, 1, -1, 1, -1, 0, 1};
@@ -49,8 +49,8 @@ bool cmp(LD a, LD b) {
     return 0;
 }
 
-LL qpow(LL a, LL b) {
-    LL ans = 1;
+ll qpow(ll a, ll b) {
+    ll ans = 1;
     a %= MOD;
     while (b) {
         if (b & 1) ans = ans * a % MOD;
@@ -63,9 +63,9 @@ LL qpow(LL a, LL b) {
 struct T {
     struct Node {
         int s[2], p;
-        LL v;
+        ll v;
         int cnt, sz;
-        void init(LL _v, int _p) {
+        void init(ll _v, int _p) {
             v = _v;
             p = _p;
             cnt = sz = 1;
@@ -77,7 +77,7 @@ struct T {
     vector<Node> tr;
     vector<int> q;
 
-    int get_node(LL v, int p) {
+    int get_node(ll v, int p) {
         int u;
         if (!q.empty()) {
             u = q.back();
@@ -123,7 +123,7 @@ struct T {
         if (!k) root = x;
     }
 
-    void find(LL val) {
+    void find(ll val) {
         int u = root;
         if (!u) return;
         while (tr[u].s[val > tr[u].v] && val != tr[u].v)
@@ -131,7 +131,7 @@ struct T {
         splay(u, 0);
     }
 
-    void insert(LL val) {
+    void insert(ll val) {
         int u = root, p = 0;
         while (u && tr[u].v != val) {
             p = u;
@@ -147,7 +147,7 @@ struct T {
         splay(u, 0);
     }
 
-    void remove(LL val) {
+    void remove(ll val) {
         find(val);
         int u = root;
         if (tr[u].v != val) return;
@@ -183,7 +183,7 @@ struct T {
         del(dnode);
     }
 
-    LL get_k(int k) {
+    ll get_k(int k) {
         k++;
         int u = root;
         while (u) {
@@ -198,7 +198,7 @@ struct T {
         return -1;
     }
 
-    int get_rank(LL val) {
+    int get_rank(ll val) {
         find(val);
         int rnk;
         if (tr[root].v < val) rnk = tr[tr[root].s[0]].sz + tr[root].cnt;
@@ -206,7 +206,7 @@ struct T {
         return rnk;
     }
 
-    LL get_k_ptr(int k) {
+    ll get_k_ptr(int k) {
         k++;
         int u = root;
         while (u) {
@@ -221,7 +221,7 @@ struct T {
         return -1;
     }
 
-    LL get_pre(LL val) {
+    ll get_pre(ll val) {
         find(val);
         int u = root;
         if (tr[u].v < val) return tr[u].v;
@@ -230,7 +230,7 @@ struct T {
         return tr[u].v;
     }
 
-    LL get_nxt(LL val) {
+    ll get_nxt(ll val) {
         find(val);
         int u = root;
         if (tr[u].v > val) return tr[u].v;
