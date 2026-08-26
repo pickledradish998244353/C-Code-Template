@@ -11,16 +11,16 @@
 using namespace std;
 using i128 = __int128;
 using u128 = unsigned __int128;
-using LL = long long;
+using ll = long long;
 using LD = long double;
 using ULL = unsigned long long;
 using PII = pair<int, int>;
-using PLL = pair<LL, LL>;
+using PLL = pair<ll, ll>;
 using PLD = pair<LD, LD>;
 
 const int N = 1e5 + 10, MOD = 998244353;
 const int INF = 1e9;
-const LL LL_INF = 1e18;
+const ll LL_INF = 1e18;
 const LD EPS = 1e-8;
 const int dx4[] = {-1, 0, 1, 0}, dy4[] = {0, 1, 0, -1};
 const int dx8[] = {-1, -1, -1, 0, 0, 1, 1, 1}, dy8[] = {-1, 0, 1, -1, 1, -1, 0, 1};
@@ -61,8 +61,8 @@ struct Hash {
         }
     }
     // 给定字符串是0-base, get 是1-base
-    LL get(int l, int r) {
-        LL v = h[r] - h[l - 1] * p[r - l + 1];
+    ll get(int l, int r) {
+        ll v = h[r] - h[l - 1] * p[r - l + 1];
         return v;
     }
 };

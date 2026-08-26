@@ -11,16 +11,16 @@
 using namespace std;
 using i128 = __int128;
 using u128 = unsigned __int128;
-using LL = long long;
+using ll = long long;
 using LD = long double;
 using ULL = unsigned long long;
 using PII = pair<int, int>;
-using PLL = pair<LL, LL>;
+using PLL = pair<ll, ll>;
 using PLD = pair<LD, LD>;
 
 const int N = 1e5 + 10, MOD = 998244353;
 const int INF = 1e9;
-const LL LL_INF = 1e18;
+const ll LL_INF = 1e18;
 const LD EPS = 1e-8;
 const int dx4[] = {-1, 0, 1, 0}, dy4[] = {0, 1, 0, -1};
 const int dx8[] = {-1, -1, -1, 0, 0, 1, 1, 1}, dy8[] = {-1, 0, 1, -1, 1, -1, 0, 1};
@@ -50,7 +50,7 @@ bool cmp(LD a, LD b) {
 
 struct Fenwick {
     int n;
-    vector<LL> tr;
+    vector<ll> tr;
 
     Fenwick() : n(0) {
     }
@@ -70,25 +70,25 @@ struct Fenwick {
         return x & -x;
     }
 
-    void add(int u, LL x) {
+    void add(int u, ll x) {
         if (u <= 0) return;
         for (int i = u; i < n; i += lowbit(i)) tr[i] += x;
     }
 
-    LL query(int u) {
+    ll query(int u) {
         u = min(u, n - 1);
-        LL ans = 0;
+        ll ans = 0;
         for (int i = u; i; i -= lowbit(i)) ans += tr[i];
         return ans;
     }
 
-    LL query(int a, int b) {
+    ll query(int a, int b) {
         if (a > b) return 0;
         return query(b) - query(a - 1);
     }
 
     // 第k个1在哪
-    LL kth(LL k) {
+    ll kth(ll k) {
         int lg = 31 - __builtin_clz(n);
         int up = 1 << lg;
         int x = 0;
@@ -104,7 +104,7 @@ struct Fenwick {
 
 struct MinFenwick {
     int n;
-    vector<LL> tr;
+    vector<ll> tr;
 
     MinFenwick(int _n) : n(_n + 1), tr(_n + 1, LL_INF) {
     }
@@ -113,23 +113,23 @@ struct MinFenwick {
         return x & -x;
     }
 
-    void update(int u, LL x) {
+    void update(int u, ll x) {
         if (u <= 0) return;
         for (int i = u; i < n; i += lowbit(i))
             tr[i] = min(tr[i], x);
     }
 
-    LL query(int u) {
+    ll query(int u) {
         u = min(u, n - 1);
-        LL ans = LL_INF;
+        ll ans = LL_INF;
         for (int i = u; i; i -= lowbit(i))
             ans = min(ans, tr[i]);
         return ans;
     }
 };
 
-LL qpow(LL a, LL b) {
-    LL ans = 1;
+ll qpow(ll a, ll b) {
+    ll ans = 1;
     a %= MOD;
     while (b) {
         if (b & 1) ans = ans * a % MOD;

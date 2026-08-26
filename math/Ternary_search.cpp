@@ -11,16 +11,16 @@
 using namespace std;
 using i128 = __int128;
 using u128 = unsigned __int128;
-using LL = long long;
+using ll = long long;
 using LD = long double;
 using ULL = unsigned long long;
 using PII = pair<int, int>;
-using PLL = pair<LL, LL>;
+using PLL = pair<ll, ll>;
 using PLD = pair<LD, LD>;
 
 const int N = 1e5 + 10, MOD = 998244353;
 const int INF = 1e9;
-const LL LL_INF = 2e18;
+const ll LL_INF = 2e18;
 const LD EPS = 1e-8;
 const int dx4[] = {-1, 0, 1, 0}, dy4[] = {0, 1, 0, -1};
 const int dx8[] = {-1, -1, -1, 0, 0, 1, 1, 1}, dy8[] = {-1, 0, 1, -1, 1, -1, 0, 1};
@@ -49,8 +49,8 @@ bool cmp(LD a, LD b) {
     return 0;
 }
 
-LL qpow(LL a, LL b) {
-    LL ans = 1;
+ll qpow(ll a, ll b) {
+    ll ans = 1;
     a %= MOD;
     while (b) {
         if (b & 1) ans = ans * a % MOD;
@@ -62,15 +62,15 @@ LL qpow(LL a, LL b) {
 
 void solve() {
     int n;
-    auto calc = [&](LL m) -> LL {
+    auto calc = [&](ll m) -> ll {
 
     };
 
-    LL l = 0, r = n * n / 4;
+    ll l = 0, r = n * n / 4;
     while (r - l >= 3) {
-        LL d = (r - l) / 3;
-        LL m1 = l + d;
-        LL m2 = r - d;
+        ll d = (r - l) / 3;
+        ll m1 = l + d;
+        ll m2 = r - d;
         if (calc(m1) <= calc(m2)) {
             l = m1;
         }

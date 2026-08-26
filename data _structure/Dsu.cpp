@@ -67,7 +67,7 @@ struct DSU {
             p[i] = i;
         }
     };
-    
+
     int find(int x) {
         if (p[x] != x) return p[x] = find(p[x]);
         return p[x];

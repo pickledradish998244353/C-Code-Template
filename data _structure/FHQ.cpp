@@ -11,16 +11,16 @@
 using namespace std;
 using i128 = __int128;
 using u128 = unsigned __int128;
-using LL = long long;
+using ll = long long;
 using LD = long double;
 using ULL = unsigned long long;
 using PII = pair<int, int>;
-using PLL = pair<LL, LL>;
+using PLL = pair<ll, ll>;
 using PLD = pair<LD, LD>;
 
 const int N = 1e5 + 10, MOD = 998244353;
 const int INF = 1e9;
-const LL LL_INF = 2e18;
+const ll LL_INF = 2e18;
 const LD EPS = 1e-8;
 const int dx4[] = {-1, 0, 1, 0}, dy4[] = {0, 1, 0, -1};
 const int dx8[] = {-1, -1, -1, 0, 0, 1, 1, 1}, dy8[] = {-1, 0, 1, -1, 1, -1, 0, 1};
@@ -49,8 +49,8 @@ bool cmp(LD a, LD b) {
     return 0;
 }
 
-LL qpow(LL a, LL b) {
-    LL ans = 1;
+ll qpow(ll a, ll b) {
+    ll ans = 1;
     a %= MOD;
     while (b) {
         if (b & 1) ans = ans * a % MOD;
@@ -61,15 +61,15 @@ LL qpow(LL a, LL b) {
 }
 
 struct FHQ {
-    using LL = long long;
+    using ll = long long;
 
     struct Node {
         int l = 0, r = 0;
         int sz = 0, cnt = 0;
         unsigned pri = 0;
-        LL v = 0;
+        ll v = 0;
 
-        void init(LL _v, unsigned _pri) {
+        void init(ll _v, unsigned _pri) {
             l = r = 0;
             sz = cnt = 1;
             pri = _pri;
@@ -93,7 +93,7 @@ struct FHQ {
         }
     }
 
-    int new_node(LL v) {
+    int new_node(ll v) {
         int u;
         if (!gc.empty()) {
             u = gc.back();
@@ -121,7 +121,7 @@ struct FHQ {
     // 分裂成:
     // x: 所有 key < v
     // y: 所有 key >= v
-    void splitLess(int u, LL v, int& x, int& y) {
+    void splitLess(int u, ll v, int& x, int& y) {
         if (!u) {
             x = y = 0;
             return;
@@ -141,7 +141,7 @@ struct FHQ {
     // 分裂成:
     // x: 所有 key <= v
     // y: 所有 key > v
-    void splitLE(int u, LL v, int& x, int& y) {
+    void splitLE(int u, ll v, int& x, int& y) {
         if (!u) {
             x = y = 0;
             return;
@@ -173,7 +173,7 @@ struct FHQ {
     }
 
     // 插入一个 val
-    void insert(LL val) {
+    void insert(ll val) {
         int a, b, c;
         splitLess(root, val, a, b); // a < val, b >= val
         splitLE(b, val, b, c);      // b == val, c > val
@@ -190,7 +190,7 @@ struct FHQ {
     }
 
     // 删除一个 val（如果存在）
-    void remove(LL val) {
+    void remove(ll val) {
         int a, b, c;
         splitLess(root, val, a, b); // a < val, b >= val
         splitLE(b, val, b, c);      // b == val, c > val
@@ -211,7 +211,7 @@ struct FHQ {
     }
 
     // 返回 val 的出现次数
-    int count(LL val) {
+    int count(ll val) {
         int a, b, c;
         splitLess(root, val, a, b);
         splitLE(b, val, b, c);
@@ -222,7 +222,7 @@ struct FHQ {
     }
 
     // 是否存在 val
-    bool find(LL val) {
+    bool find(ll val) {
         int a, b, c;
         splitLess(root, val, a, b);
         splitLE(b, val, b, c);
@@ -244,7 +244,7 @@ struct FHQ {
     // 1-based 排名：
     // 返回 1 + #(元素 < val)
     // 也就是 val 如果插进去，会在第几个位置
-    int get_rank(LL val) {
+    int get_rank(ll val) {
         int a, b;
         splitLess(root, val, a, b);
         int res = tr[a].sz + 1;
@@ -254,7 +254,7 @@ struct FHQ {
 
     // 1-based 第 k 小
     // 越界返回 -1
-    LL get_k(int k) {
+    ll get_k(int k) {
         if (k < 1 || k > size()) return -1;
 
         int u = root;
@@ -298,7 +298,7 @@ struct FHQ {
 
     // 严格前驱：< val 的最大值
     // 不存在返回 -1
-    LL get_pre(LL val) {
+    ll get_pre(ll val) {
         int a, b;
         splitLess(root, val, a, b); // a < val, b >= val
 
@@ -309,7 +309,7 @@ struct FHQ {
 
         int u = a;
         while (tr[u].r) u = tr[u].r;
-        LL res = tr[u].v;
+        ll res = tr[u].v;
 
         root = merge(a, b);
         return res;
@@ -317,7 +317,7 @@ struct FHQ {
 
     // 严格后继：> val 的最小值
     // 不存在返回 -1
-    LL get_nxt(LL val) {
+    ll get_nxt(ll val) {
         int a, b;
         splitLE(root, val, a, b); // a <= val, b > val
 
@@ -328,7 +328,7 @@ struct FHQ {
 
         int u = b;
         while (tr[u].l) u = tr[u].l;
-        LL res = tr[u].v;
+        ll res = tr[u].v;
 
         root = merge(a, b);
         return res;

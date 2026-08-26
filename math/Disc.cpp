@@ -11,16 +11,16 @@
 using namespace std;
 using i128 = __int128;
 using u128 = unsigned __int128;
-using LL = long long;
+using ll = long long;
 using LD = long double;
 using ULL = unsigned long long;
 using PII = pair<int, int>;
-using PLL = pair<LL, LL>;
+using PLL = pair<ll, ll>;
 using PLD = pair<LD, LD>;
 
 const int N = 1e5 + 10, MOD = 998244353;
 const int INF = 1e9;
-const LL LL_INF = 2e18;
+const ll LL_INF = 2e18;
 const LD EPS = 1e-8;
 const int dx4[] = {-1, 0, 1, 0}, dy4[] = {0, 1, 0, -1};
 const int dx8[] = {-1, -1, -1, 0, 0, 1, 1, 1}, dy8[] = {-1, 0, 1, -1, 1, -1, 0, 1};
@@ -48,8 +48,8 @@ bool cmp(LD a, LD b) {
     return 0;
 }
 
-LL qpow(LL a, LL b) {
-    LL ans = 1;
+ll qpow(ll a, ll b) {
+    ll ans = 1;
     a %= MOD;
     while (b) {
         if (b & 1) ans = ans * a % MOD;
@@ -61,12 +61,12 @@ LL qpow(LL a, LL b) {
 
 struct Disc {
     bool flg;
-    vector<LL> a;
+    vector<ll> a;
 
     Disc() : flg(0) {
     }
 
-    void add(LL v) {
+    void add(ll v) {
         if (flg == 1) return;
         a.emplace_back(v);
     }
@@ -78,7 +78,7 @@ struct Disc {
         a.erase(unique(all(a)), a.end());
     }
 
-    int get(LL v, bool t) {
+    int get(ll v, bool t) {
         if (!flg) {
             init();
         }
