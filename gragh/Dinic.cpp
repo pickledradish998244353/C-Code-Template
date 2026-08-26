@@ -11,16 +11,16 @@
 using namespace std;
 using i128 = __int128;
 using u128 = unsigned __int128;
-using LL = long long;
+using ll = long long;
 using LD = long double;
 using ULL = unsigned long long;
 using PII = pair<int, int>;
-using PLL = pair<LL, LL>;
+using PLL = pair<ll, ll>;
 using PLD = pair<LD, LD>;
 
 const int N = 1e5 + 10, MOD = 998244353;
 const int INF = 1e9;
-const LL LL_INF = 2e18;
+const ll LL_INF = 2e18;
 const LD EPS = 1e-8;
 const int dx4[] = {-1, 0, 1, 0}, dy4[] = {0, 1, 0, -1};
 const int dx8[] = {-1, -1, -1, 0, 0, 1, 1, 1}, dy8[] = {-1, 0, 1, -1, 1, -1, 0, 1};
@@ -49,8 +49,8 @@ bool cmp(LD a, LD b) {
     return 0;
 }
 
-LL qpow(LL a, LL b) {
-    LL ans = 1;
+ll qpow(ll a, ll b) {
+    ll ans = 1;
     a %= MOD;
     while (b) {
         if (b & 1) ans = ans * a % MOD;
@@ -63,7 +63,7 @@ LL qpow(LL a, LL b) {
 struct Dinic {
     struct Edge {
         int to;
-        LL cap;
+        ll cap;
         int rev;
     };
 
@@ -75,7 +75,7 @@ struct Dinic {
     Dinic(int _n) : n(_n), adj(_n + 1), level(_n + 1), cur(_n + 1) {
     }
 
-    void add(int u, int v, LL w) {
+    void add(int u, int v, ll w) {
         adj[u].push_back({v, w, (int)adj[v].size()});
         adj[v].push_back({u, 0, (int)adj[u].size() - 1});
     }
@@ -98,12 +98,12 @@ struct Dinic {
         return level[t] != -1;
     }
 
-    LL dfs(int u, int t, LL flow) {
+    ll dfs(int u, int t, ll flow) {
         if (u == t || flow == 0) return flow;
         for (int& i = cur[u]; i < adj[u].size(); ++i) {
             Edge& e = adj[u][i];
             if (level[e.to] == level[u] + 1 && e.cap > 0) {
-                LL d = dfs(e.to, t, min(flow, e.cap));
+                ll d = dfs(e.to, t, min(flow, e.cap));
                 if (d > 0) {
                     e.cap -= d;
                     adj[e.to][e.rev].cap += d;
@@ -114,11 +114,11 @@ struct Dinic {
         return 0;
     }
 
-    LL max_flow(int s, int t) {
-        LL flow = 0;
+    ll max_flow(int s, int t) {
+        ll flow = 0;
         while (bfs(s, t)) {
             fill(cur.begin(), cur.end(), 0);
-            while (LL pushed = dfs(s, t, LL_INF)) {
+            while (ll pushed = dfs(s, t, LL_INF)) {
                 flow += pushed;
             }
         }
