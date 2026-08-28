@@ -4,8 +4,8 @@
 #define y second
 #define all(x) x.begin(), x.end()
 #define pop_cnt(x) __builtin_popcountll((unsigned long long)(x))
-#define bcnt32(x) ((x) == 0 ? 0 : 32 - __builtin_clz((unsigned int)(x)))
-#define bcnt64(x) ((x) == 0 ? 0 : 64 - __builtin_clzll((unsigned long long)(x)))
+#define b32(x) ((x) == 0 ? 0 : 32 - __builtin_clz((unsigned int)(x)))
+#define b64(x) ((x) == 0 ? 0 : 64 - __builtin_clzll((unsigned long long)(x)))
 
 using namespace std;
 using i128 = __int128;
