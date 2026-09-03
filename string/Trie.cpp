@@ -1,6 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+using ll = long long;
+
 template <int M, char Base>
 struct Trie {
     vector<array<int, M>> tr; // 子节点
@@ -87,6 +89,7 @@ struct Trie {
     } // 节点数量
 };
 
+// 01Trie
 template <typename T = int, int BITS = 30>
 struct BinaryTrie {
     struct Node {
@@ -195,5 +198,30 @@ struct BinaryTrie {
 
     int count() const {
         return tr[0].cnt;
+    }
+};
+
+// 普通Trie
+struct T {
+    int n;
+    int tot;
+    vector<array<int, 26>> tr;
+    vector<int> cnt;
+
+    T(int _n) : n(_n), tr(_n), cnt(_n) {
+        tot = 1;
+        n = _n;
+    }
+
+    void insert(string& s) {
+        int p = 1;
+        for (int i = 0; i < s.size(); ++i) {
+            int idx = s[i] - 'a';
+            if (!tr[p][idx]) {
+                tr[p][idx] = ++tot;
+            }
+            p = tr[p][idx];
+        }
+        cnt[p]++;
     }
 };

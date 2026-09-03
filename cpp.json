@@ -347,5 +347,40 @@
             "};$0"
         ],
         "description": "Modular Arithmetic Template (mint) using Fermat's Little Theorem"
+    },
+    "trie": {
+        "prefix": "trie",
+        "body": [
+            "struct Trie {",
+            "    int n, tot;",
+            "    vector<array<int, 26>> tr;",
+            "    vector<int> cnt;",
+            "",
+            "    Trie(int _n) : n(_n), tot(1), tr(_n), cnt(_n) {}",
+            "",
+            "    void insert(const string& s) {",
+            "        int p = 1;",
+            "        for (char c : s) {",
+            "            int idx = c - 'a';",
+            "            if (!tr[p][idx]) {",
+            "                tr[p][idx] = ++tot;",
+            "            }",
+            "            p = tr[p][idx];",
+            "        }",
+            "        cnt[p]++;",
+            "    }",
+            "",
+            "    int query(const string& s) {",
+            "        int p = 1;",
+            "        for (char c : s) {",
+            "            int idx = c - 'a';",
+            "            if (!tr[p][idx]) return 0;",
+            "            p = tr[p][idx];",
+            "        }",
+            "        return cnt[p];",
+            "    }",
+            "};$0"
+        ],
+        "description": "Trie (Prefix Tree) Template"
     }
 }
