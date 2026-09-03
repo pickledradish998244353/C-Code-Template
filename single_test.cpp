@@ -17,13 +17,13 @@ using pii = pair<int, int>;
 using pll = pair<ll, ll>;
 using pld = pair<ld, ld>;
 
-const int N = 1e5 + 10, MOD = 998244353;
+const int N = 2e5 + 10, MOD = 998244353;
 const int inf = 1e9;
 const ll ll_inf = 2e18;
 const ld eps = 1e-11;
-const int dx4[] = {-1, 0, 1, 0}, dy4[] = {0, 1, 0, -1};
-const int dx8[] = {-1, -1, -1, 0, 0, 1, 1, 1}, dy8[] = {-1, 0, 1, -1, 1, -1, 0, 1};
-const int hx[] = {-2, -2, -1, -1, 1, 1, 2, 2}, hy[] = {-1, 1, -2, 2, -2, 2, -1, 1};
+const int dx4[] = {-1, 0, 1, 0}, dy4[] = {0, 1, 1}, dy8[] = {-1, 0, 1, -1, 1, -1, 0, 1};
+// const int hx[] = {-2, -2, -1, -1, 1, 1,1, 0, -1};
+// const int dx8[] = {-1, -1, -1, 0, 0, 1,  2, 2}, hy[] = {-1, 1, -2, 2, -2, 2, -1, 1};
 
 istream& operator>>(istream& is, i128& val) {
     string str;
@@ -43,14 +43,10 @@ ostream& operator<<(ostream& os, i128 val) {
     return os;
 }
 
-template <class T>
-auto vec(size_t n) {
-    return vector<T>(n);
-}
-
 template <class T, class... Args>
 auto vec(size_t n, Args... args) {
-    return vector<decltype(vec<T>(args...))>(n, vec<T>(args...));
+    if constexpr (sizeof...(args) == 0) return vector<T>(n);
+    else return vector(n, vec<T>(args...));
 }
 
 ll qpow(ll a, ll b) {
@@ -65,10 +61,6 @@ ll qpow(ll a, ll b) {
 }
 
 void solve() {
-
-/**/ #ifdef LOCAL
-    cout << flush;
-/**/ #endif
 }
 
 int main() {
