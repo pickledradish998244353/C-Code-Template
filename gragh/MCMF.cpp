@@ -76,10 +76,12 @@ struct MCMF {
     int n;
     vector<vector<Edge>> adj;
     vector<Cost> dist;
-    vector<int> pv, pe;
+    vector<int> cur;
     vector<bool> in_q;
+    vector<bool> vis;
+    Cost total_cost;
 
-    MCMF(int n) : n(n), adj(n + 1), dist(n + 1), pv(n + 1), pe(n + 1), in_q(n + 1) {
+    MCMF(int n) : n(n), adj(n + 1), dist(n + 1), cur(n + 1), in_q(n + 1), vis(n + 1) {
     }
 
     void add_edge(int u, int v, Cap cap, Cost cost) {
@@ -88,8 +90,8 @@ struct MCMF {
     }
 
     bool spfa(int s, int t) {
-        fill(all(dist), ll_inf);
-        fill(all(in_q), false);
+        fill(dist.begin(), dist.end(), ll_inf);
+        fill(in_q.begin(), in_q.end(), false);
         queue<int> q;
 
         dist[s] = 0;
@@ -101,12 +103,9 @@ struct MCMF {
             q.pop();
             in_q[u] = false;
 
-            for (int i = 0; i < (int)adj[u].size(); ++i) {
-                auto& e = adj[u][i];
+            for (auto& e : adj[u]) {
                 if (e.cap > 0 && dist[e.to] > dist[u] + e.cost) {
                     dist[e.to] = dist[u] + e.cost;
-                    pv[e.to] = u;
-                    pe[e.to] = i;
                     if (!in_q[e.to]) {
                         q.push(e.to);
                         in_q[e.to] = true;
@@ -117,47 +116,42 @@ struct MCMF {
         return dist[t] != ll_inf;
     }
 
-    // 求解标准 MCMF，返回 {最大流, 最小总费用}
+    Cap dfs(int u, int t, Cap flow) {
+        if (u == t) return flow;
+        vis[u] = true;
+        Cap pushed = 0;
+
+        for (int& i = cur[u]; i < (int)adj[u].size(); ++i) {
+            auto& e = adj[u][i];
+            if (!vis[e.to] && e.cap > 0 && dist[e.to] == dist[u] + e.cost) {
+                Cap tr = dfs(e.to, t, min(flow - pushed, e.cap));
+                if (tr > 0) {
+                    e.cap -= tr;
+                    adj[e.to][e.rev].cap += tr;
+                    pushed += tr;
+                    total_cost += tr * e.cost;
+                    if (pushed == flow) break;
+                }
+            }
+        }
+        vis[u] = false;
+        return pushed;
+    }
+
     pair<Cap, Cost> work(int s, int t) {
         Cap flow = 0;
-        Cost cost = 0;
+        total_cost = 0;
         while (spfa(s, t)) {
-            Cap push = numeric_limits<Cap>::max();
-            for (int u = t; u != s; u = pv[u]) {
-                push = min(push, adj[pv[u]][pe[u]].cap);
+            fill(cur.begin(), cur.end(), 0);
+            fill(vis.begin(), vis.end(), false);
+            Cap pushed;
+            while ((pushed = dfs(s, t, numeric_limits<Cap>::max())) > 0) {
+                flow += pushed;
             }
-            for (int u = t; u != s; u = pv[u]) {
-                auto& e = adj[pv[u]][pe[u]];
-                e.cap -= push;
-                adj[u][e.rev].cap += push;
-            }
-            flow += push;
-            cost += push * dist[t];
         }
-        return {flow, cost};
-    }
-
-    // 针对本题：返回每次增广后的累计总费用列表
-    vector<Cost> solve_steps(int s, int t) {
-        Cost total_cost = 0;
-        vector<Cost> res;
-        while (spfa(s, t)) {
-            Cap push = numeric_limits<Cap>::max();
-            for (int u = t; u != s; u = pv[u]) {
-                push = min(push, adj[pv[u]][pe[u]].cap);
-            }
-            for (int u = t; u != s; u = pv[u]) {
-                auto& e = adj[pv[u]][pe[u]];
-                e.cap -= push;
-                adj[u][e.rev].cap += push;
-            }
-            total_cost += push * dist[t];
-            res.push_back(total_cost);
-        }
-        return res;
+        return {flow, total_cost};
     }
 };
-
 void solve() {
 
 /**/ #ifdef LOCAL
