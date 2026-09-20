@@ -1,29 +1,30 @@
+
 #include <bits/stdc++.h>
 
 #define x first
 #define y second
 #define all(x) x.begin(), x.end()
-#define vec1(T, name, n, val) vector<T> name(n, val)
-#define vec2(T, name, n, m, val) vector<vector<T>> name(n, vector<T>(m, val))
-#define vec3(T, name, n, m, k, val) vector<vector<vector<T>>> name(n, vector<vector<T>>(m, vector<T>(k, val)))
-#define vec4(T, name, n, m, k, p, val) vector<vector<vector<vector<T>>>> name((n), vector<vector<vector<T>>>((m), vector<vector<T>>((k), vector<T>((p), (val)))))
+#define pop_cnt(x) __builtin_popcountll((unsigned long long)(x))
+#define b32(x) ((x) == 0 ? 0 : 32 - __builtin_clz((unsigned int)(x)))
+#define b64(x) ((x) == 0 ? 0 : 64 - __builtin_clzll((unsigned long long)(x)))
 
 using namespace std;
 using i128 = __int128;
 using u128 = unsigned __int128;
 using ll = long long;
-using LD = long double;
-using ULL = unsigned long long;
-using PII = pair<int, int>;
-using PLL = pair<ll, ll>;
-using PLD = pair<LD, LD>;
+using ld = long double;
+using ull = unsigned long long;
+using pii = pair<int, int>;
+using pll = pair<ll, ll>;
+using pld = pair<ld, ld>;
 
-const int N = 1e5 + 10, MOD = 998244353;
-const int INF = 1e9;
-const ll LL_INF = 1e18;
-const LD EPS = 1e-8;
+const int N = 2e5 + 10, MOD = 998244353;
+const int inf = 1e9;
+const ll ll_inf = 2e18;
+const ld eps = 1e-11;
 const int dx4[] = {-1, 0, 1, 0}, dy4[] = {0, 1, 0, -1};
-const int dx8[] = {-1, -1, -1, 0, 0, 1, 1, 1}, dy8[] = {-1, 0, 1, -1, 1, -1, 0, 1};
+// const int dx8[] = {-1, -1, -1, 0, 0, 1, 1, 1}, dy8[] = {-1, 0, 1, -1, 1, -1, 0, 1};
+// const int hx[] = {-2, -2, -1, -1, 1, 1, 2, 2}, hy[] = {-1, 1, -2, 2, -2, 2, -1, 1};
 
 istream& operator>>(istream& is, i128& val) {
     string str;
@@ -43,31 +44,53 @@ ostream& operator<<(ostream& os, i128 val) {
     return os;
 }
 
-bool cmp(LD a, LD b) {
-    if (fabs(a - b) < EPS) return 1;
-    return 0;
+template <class T, class... Args>
+auto vec(size_t n, Args... args) {
+    if constexpr (sizeof...(args) == 0) return vector<T>(n);
+    else return vector(n, vec<T>(args...));
+}
+
+ll qpow(ll a, ll b) {
+    ll ans = 1;
+    a %= MOD;
+    while (b) {
+        if (b & 1) ans = ans * a % MOD;
+        a = a * a % MOD;
+        b >>= 1;
+    }
+    return ans;
 }
 
 struct Hash {
-    vector<ULL> h, p;
-    int B = 131;
+    vector<ll> h1, h2, p1, p2;
+    static const int B1 = 131, B2 = 13331;
+    static const int MOD1 = 1e9 + 7, MOD2 = 1e9 + 9;
+
     Hash(const string& s) {
         int n = s.size();
-        h.resize(n + 1, 0);
-        p.resize(n + 1, 1);
+        h1.resize(n + 1, 0);
+        h2.resize(n + 1, 0);
+        p1.resize(n + 1, 1);
+        p2.resize(n + 1, 1);
+
         for (int i = 0; i < n; ++i) {
-            p[i + 1] = p[i] * B;
-            h[i + 1] = (h[i] * B + s[i]);
+            p1[i + 1] = p1[i] * B1 % MOD1;
+            p2[i + 1] = p2[i] * B2 % MOD2;
+            h1[i + 1] = (h1[i] * B1 + s[i]) % MOD1;
+            h2[i + 1] = (h2[i] * B2 + s[i]) % MOD2;
         }
     }
-    // 给定字符串是0-base, get 是1-base
-    ll get(int l, int r) {
-        ll v = h[r] - h[l - 1] * p[r - l + 1];
-        return v;
+
+    // 给定字符串是 0-base，get 传入 1-base 的闭区间 [l, r]
+    pll get(int l, int r) {
+        ll v1 = (h1[r] - h1[l - 1] * p1[r - l + 1] % MOD1 + MOD1) % MOD1;
+        ll v2 = (h2[r] - h2[l - 1] * p2[r - l + 1] % MOD2 + MOD2) % MOD2;
+        return {v1, v2};
     }
 };
 
 void solve() {
+
 /**/ #ifdef LOCAL
     cout << flush;
 /**/ #endif
