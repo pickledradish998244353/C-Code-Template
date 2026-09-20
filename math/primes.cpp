@@ -70,7 +70,7 @@ void solve() {
             ps.push_back(i);
         }
         for (int j : ps) {
-            if (1ll * j * i > n) continue;
+            if (1ll * j * i > n) break;
             vis[i * j] = 1;
             if (i % j == 0) break;
         }
