@@ -1,7 +1,3 @@
-#include <bits/stdc++.h>
-
-using namespace std;
-
 template <class Info, class Tag>
 struct LazySegmentTree {
     int n;
@@ -219,3 +215,18 @@ struct LazySegmentTree {
         return findLast(1, 0, n, l, r, pred);
     }
 };
+
+struct Tag {
+    void apply(const Tag& t) & {
+    }
+};
+
+struct Info {
+
+    void apply(const Tag& t) & {
+    }
+};
+
+Info operator+(const Info& a, const Info& b) {
+    return {};
+}
