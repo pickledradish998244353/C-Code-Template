@@ -64,6 +64,8 @@ void solve() {
 }
 
 int main() {
+    // freopen("1.in", "r", stdin);
+    // freopen("1.out", "w", stdout);
     ios::sync_with_stdio(false);
     cin.tie(0), cout.tie(0);
 
