@@ -138,17 +138,7 @@ struct LazySegmentTree {
         rangeApply(1, 0, n, l, r, v);
     }
 
-    /*
-        找 [x, y) 内第一个满足条件的位置。
-
-        pred(info[p]) == false:
-            表示这个节点对应的整个区间一定不可能有答案。
-
-        pred(info[p]) == true:
-            表示这个区间“可能”包含答案，需要继续往下找。
-
-        返回下标；不存在返回 -1。
-    */
+    // 找 [x, y) 内第一个满足条件的位置
     template <class F>
     int findFirst(int p, int l, int r, int x, int y, F&& pred) {
         if (r <= x || y <= l) {
@@ -182,6 +172,12 @@ struct LazySegmentTree {
         return findFirst(1, 0, n, l, r, pred);
     }
 
+    // 找 [x, y) 内最后一个满足条件的位置
+    // 常见示例:
+    // 找 [l, r) 内最后一个 >= v 的位置
+    // int pos = seg.findLast(l, r, [&](const Info& x) {
+    //     return x.max >= v;
+    // });
     template <class F>
     int findLast(int p, int l, int r, int x, int y, F&& pred) {
         if (r <= x || y <= l) {
