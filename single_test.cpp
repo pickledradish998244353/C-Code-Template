@@ -49,6 +49,18 @@ auto vec(size_t n, Args... args) {
     else return vector(n, vec<T>(args...));
 }
 
+template <typename Map, typename Key>
+void dec(Map& mp, const Key& key) {
+    auto it = mp.find(key);
+    if (it == mp.end()) return;
+    if (--(it->second) == 0) mp.erase(it);
+}
+
+template <typename Map, typename Key, typename Val>
+void inc(Map& mp, const Key& key, const Val& v = 1) {
+    mp[key] += v;
+}
+
 ll qpow(ll a, ll b) {
     ll ans = 1;
     a %= MOD;
