@@ -89,6 +89,31 @@ struct Hash {
     }
 };
 
+struct Hash {
+    const unsigned long long P1 = 1000000000000000003ULL;
+    const unsigned long long P2 = 1000000000000000009ULL;
+    const unsigned long long P3 = 1000000000000000031ULL;
+    i128 h1 = 0, h2 = 0, h3 = 0;
+    Hash(string& s) {
+        for (char c : s) {
+            int d = c - '0';
+            h1 = ((__int128)h1 * 10 + d) % P1;
+            h2 = ((__int128)h2 * 10 + d) % P2;
+            h3 = ((__int128)h3 * 10 + d) % P3;
+        }
+    }
+    Hash() {
+    }
+    Hash(i128 _h1, i128 _h2, i128 _h3) : h1(_h1), h2(_h2), h3(_h3) {
+    }
+
+    bool operator<(const Hash& h) const {
+        if (h1 != h.h1) return h1 < h.h1;
+        if (h2 != h.h2) return h2 < h.h2;
+        return h3 < h.h3;
+    }
+};
+
 void solve() {
 
 /**/ #ifdef LOCAL
