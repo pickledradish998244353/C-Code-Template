@@ -11,7 +11,7 @@
         "editor.defaultFormatter": "ms-vscode.cpptools"
     },
     "editor.fontSize": 16,
-    "editor.fontFamily": "Fira Code",
+    "editor.fontFamily": "JetBrains Mono",
     "editor.fontLigatures": "'calt', 'ss01', 'zero'",
     "editor.tabSize": 4,
     "editor.insertSpaces": true,
@@ -27,8 +27,8 @@
     // "clang-format.executable": "...", 
     // --- 以下是你原来的其他配置，保持不变 ---
     "workbench.colorCustomizations": {
-        "[Dark 2026]": {
-            "editor.background": "#333333",
+        "[Dracula Theme Soft]": {
+            "editor.background": "#2f2f2f",
             "sideBar.background": "#2a2a2a",
             "activityBar.background": "#2a2a2a",
             "editorStickyScroll.background": "#333333",
